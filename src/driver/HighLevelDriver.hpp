@@ -12,7 +12,7 @@ public:
     HighLevelDriver();
 
     void setJointAngle(Joints joint, uint16_t degrees, float speedInPercent = 100.0);
-    void setTimeToComplete(int timeInMs);
+    void setTimeToComplete(uint16_t timeInMs);
     bool startMovement();
     void resetQueue();
     float getProgressInPercent();
@@ -21,6 +21,9 @@ public:
     uint16_t getMaxAngle(Joints joint);
 
 private:
+    int16_t pwmToDeg(uint16_t pwm);
+    uint16_t degToPwm(int16_t deg);
+
     std::map<Joints, uint16_t> currentPositions;
     std::map<Joints, uint16_t> goalPositions;
 

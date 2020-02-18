@@ -19,40 +19,53 @@ HighLevelDriver::HighLevelDriver()
 
 void HighLevelDriver::setJointAngle(Joints joint, uint16_t degrees, float speedInPercent)
 {
-    
+    lowLevelDriver.setJointPwm(joint, degToPwm(degrees), speedInPercent * 655.35);
 }
 
-void HighLevelDriver::setTimeToComplete(int timeInMs)
+void HighLevelDriver::setTimeToComplete(uint16_t timeInMs)
 {
-
+    lowLevelDriver.setTimeToComplete(timeInMs);
 }
 
 bool HighLevelDriver::startMovement()
 {
-
+    return lowLevelDriver.sendCommand();
 }
 
 void HighLevelDriver::resetQueue()
 {
-
+    lowLevelDriver.resetCommand();
 }
 
 float HighLevelDriver::getProgressInPercent()
 {
-
+    // TODO
+    return -1;
 }
 
 void HighLevelDriver::emergencyStop()
 {
-
+    // TODO
 }
 
 uint16_t HighLevelDriver::getMinAngle(Joints joint)
 {
-
+    return pwmToDeg(lowLevelDriver.getMinPwm(joint));
 }
 
 uint16_t HighLevelDriver::getMaxAngle(Joints joint)
 {
+    return pwmToDeg(lowLevelDriver.getMaxPwm(joint));
+}
 
+int16_t HighLevelDriver::pwmToDeg(uint16_t pwm)
+{
+    pwm /= (65535.0 / 360.0);
+    return pwm - 90;
+}
+
+uint16_t HighLevelDriver::degToPwm(int16_t deg)
+{
+    uint16_t pwm = deg + 90;
+    return pwm *= (65535.0 / 360.0);
 }
