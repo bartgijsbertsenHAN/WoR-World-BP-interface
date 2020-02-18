@@ -1,3 +1,10 @@
+# ========== CUSTOM GITIGNORE ==========
+
+docs
+.vscode
+
+# ========== DEFAULT GITIGNORE ==========
+
 # Prerequisites
 *.d
 
