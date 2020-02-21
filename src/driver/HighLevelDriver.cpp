@@ -45,7 +45,7 @@ float HighLevelDriver::getProgressInPercent()
 
 void HighLevelDriver::emergencyStop()
 {
-    // TODO
+    lowLevelDriver.emergencyStop();
 }
 
 uint16_t HighLevelDriver::getMinAngle(Joints joint)
