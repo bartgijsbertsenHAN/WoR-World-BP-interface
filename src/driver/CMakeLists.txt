@@ -133,13 +133,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-## set(Boost_USE_STATIC_LIBS OFF) 
-## set(Boost_USE_MULTITHREADED ON)  
-## set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost 1.65.1 REQUIRED COMPONENTS system)   
-add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
-file(GLOB_RECURSE source_list "*.cpp" "*.hpp")
-add_executable(${PROJECT_NAME}_node ${source_list})
+add_executable(driver_exe src/main.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
