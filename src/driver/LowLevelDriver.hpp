@@ -10,6 +10,8 @@
 class LowLevelDriver
 {
 public:
+    LowLevelDriver() = delete;
+
     /// @brief De constructor initialiseert de klassevariabelen
     /// @param port The port to send the commands to
     LowLevelDriver(std::string port);
