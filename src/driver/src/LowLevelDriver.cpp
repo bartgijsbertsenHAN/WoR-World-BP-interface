@@ -100,13 +100,15 @@ bool LowLevelDriver::sendCommand()
 
     boost::asio::streambuf b;
     std::ostream os(&b);
-    os << message << "\n";
+    os << message << "\r";
     boost::asio::write(serial, b.data());
     os.flush();
 
     if (serial.is_open()) {
         serial.close();
     }
+
+    std::cout << "[INFO] Sending command to port: " << message << std::endl;
 
     resetCommand();
 }
@@ -118,7 +120,8 @@ void LowLevelDriver::resetCommand()
 
 void LowLevelDriver::emergencyStop()
 {
-    // TODO: Implement emergency stop
+    message = "STOP";
+    sendCommand();
 }
 
 /// Controleer of het gewricht in de lijst met laagste waarden staat.<br>
