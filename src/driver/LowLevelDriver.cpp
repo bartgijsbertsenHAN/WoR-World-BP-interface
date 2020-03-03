@@ -5,7 +5,8 @@
 /// Reset de message string naar een lege string<br>
 /// Voegt een standaard waarde van 500 toe aan ieder gewricht in de minPwm map.<br>
 /// Voegt een standaard waarde van 2500 toe aan ieder gewricht in de maxPwm map.<br>
-LowLevelDriver::LowLevelDriver()
+LowLevelDriver::LowLevelDriver(std::string port)
+    :minPwm(), maxPwm(), message(), port(port)
 {
     resetCommand();
 
@@ -87,7 +88,26 @@ bool LowLevelDriver::setPositionOffset(Joints joint, int16_t offset)
 
 bool LowLevelDriver::sendCommand()
 {
-    std::cout << "[TO ROBOT] " << message << '\n' << std::endl;
+    // std::cout << "[TO ROBOT] " << message << '\n' << std::endl;
+    boost::asio::io_service ioservice;
+	boost::asio::serial_port serial(ioservice, port);
+
+	serial.set_option(boost::asio::serial_port_base::baud_rate(9600));
+	serial.set_option(boost::asio::serial_port::flow_control(boost::asio::serial_port::flow_control::none));
+	serial.set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
+	serial.set_option(boost::asio::serial_port::stop_bits(boost::asio::serial_port::stop_bits::one));
+	serial.set_option(boost::asio::serial_port::character_size(boost::asio::serial_port::character_size(8)));
+
+    boost::asio::streambuf b;
+    std::ostream os(&b);
+    os << message << "\n";
+    boost::asio::write(serial, b.data());
+    os.flush();
+
+    if (serial.is_open()) {
+        serial.close();
+    }
+
     resetCommand();
 }
 

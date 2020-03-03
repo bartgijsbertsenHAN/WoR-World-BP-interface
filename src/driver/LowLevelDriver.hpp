@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <map>
+#include <boost/asio.hpp>
 #include "DriverEnums.hpp"
 
 /// @brief Deze klasse beheert direct de communicatie met de robotarm, zonder functionaliteit toe te voegen
@@ -10,7 +11,8 @@ class LowLevelDriver
 {
 public:
     /// @brief De constructor initialiseert de klassevariabelen
-    LowLevelDriver();
+    /// @param port The port to send the commands to
+    LowLevelDriver(std::string port);
 
     /// @brief Deze functie voegt de gewenste hoek van het meegegeven gewricht toe aan de wachtrij voor de robotarm
     /// @param joint De enum waarde van het gewricht waar het commando naar toe wordt gestuurd
@@ -58,4 +60,7 @@ private:
 
     /// @brief Slaat het bericht op terwijl het wordt opgebouwd, tot het wordt verzonden. (De wachtrij)
     std::string message;
+
+    /// @brief Slaat de port op als een string
+    std::string port;
 };

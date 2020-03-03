@@ -1,6 +1,7 @@
 #include "HighLevelDriver.hpp"
 
-HighLevelDriver::HighLevelDriver()
+HighLevelDriver::HighLevelDriver(std::string port)
+    :currentPositions(), goalPositions(), lowLevelDriver(port)
 {
     currentPositions.insert(std::pair<Joints, int>(BASE, 0));
     currentPositions.insert(std::pair<Joints, int>(SHOULDER, 0));

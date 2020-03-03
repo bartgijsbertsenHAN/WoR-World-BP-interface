@@ -9,7 +9,7 @@
 class HighLevelDriver : IDriver
 {
 public:
-    HighLevelDriver();
+    HighLevelDriver(std::string port);
 
     void setJointAngle(Joints joint, uint16_t degrees, float speedInPercent = 100.0);
     void setTimeToComplete(uint16_t timeInMs);

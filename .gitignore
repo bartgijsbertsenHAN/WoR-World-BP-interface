@@ -2,6 +2,8 @@
 
 docs
 .vscode
+devel/
+build/
 
 # ========== DEFAULT GITIGNORE ==========
 
