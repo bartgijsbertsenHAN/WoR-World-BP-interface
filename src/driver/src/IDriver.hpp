@@ -10,7 +10,7 @@ public:
     /// @param joint De enum waarde van het gewricht wat bewogen moet worden
     /// @param degrees De nieuwe hoek voor het gewricht
     /// @param speedInPercent De maximale snelheid van het gewricht in een percentage
-    virtual void setJointAngle(Joints joint, uint16_t degrees, float speedInPercent = 100.0) = 0;
+    virtual void setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0) = 0;
 
     /// @brief Stelt de minimale tijd in waarin de beweging wordt afgerond
     /// @param timeInMs De tijd die de volledige beweging nodig heeft om af te ronden 

@@ -11,8 +11,8 @@ class HighLevelDriver : IDriver
 public:
     HighLevelDriver(std::string port);
 
-    void setJointAngle(Joints joint, uint16_t degrees, float speedInPercent = 100.0);
-    void setTimeToComplete(uint16_t timeInMs);
+    void setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0);
+    void setTimeToComplete(int timeInMs);
     bool startMovement();
     void resetQueue();
     float getProgressInPercent();
@@ -22,7 +22,9 @@ public:
 
 private:
     int16_t pwmToDeg(uint16_t pwm);
+public:
     uint16_t degToPwm(int16_t deg);
+private:
 
     std::map<Joints, uint16_t> currentPositions;
     std::map<Joints, uint16_t> goalPositions;
