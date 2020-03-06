@@ -21,11 +21,14 @@ public:
     uint16_t getMaxAngle(Joints joint);
 
 private:
-    int16_t pwmToDeg(uint16_t pwm);
+    int16_t pwmToDeg(uint16_t pwm, int8_t offset);
 public:
-    uint16_t degToPwm(int16_t deg);
+    uint16_t degToPwm(int16_t deg, int8_t offset);
+
+    uint8_t getOffsetForJoint(Joints joint);
 private:
 
+    std::map<Joints, uint8_t> angleOffsets;
     std::map<Joints, uint16_t> currentPositions;
     std::map<Joints, uint16_t> goalPositions;
 
