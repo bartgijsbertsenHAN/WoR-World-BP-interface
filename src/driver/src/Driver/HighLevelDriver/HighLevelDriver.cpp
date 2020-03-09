@@ -1,22 +1,24 @@
 #include "HighLevelDriver.hpp"
 
 HighLevelDriver::HighLevelDriver(std::string port)
-    :angleOffsets(), currentPositions(), goalPositions(), lowLevelDriver(port)
+    :negativeRange(), currentPositions(), goalPositions(), lowLevelDriver(port)
 {
-    angleOffsets.insert(std::pair<Joints, uint8_t>(BASE,          90));
-    angleOffsets.insert(std::pair<Joints, uint8_t>(SHOULDER,      30));
-    angleOffsets.insert(std::pair<Joints, uint8_t>(ELBOW,         0));
-    angleOffsets.insert(std::pair<Joints, uint8_t>(WRIST_UP_DOWN, 90));
-    angleOffsets.insert(std::pair<Joints, uint8_t>(GRIPPER,       0));
-    angleOffsets.insert(std::pair<Joints, uint8_t>(WRIST_ROTATE,  90));
+    // See the comments in the .hpp about the negativeRange variable
+    //  Main point made there is that the values show how much of the range of 180 degrees is below 90 degrees.
+    negativeRange.insert(std::pair<Joints, uint8_t>(BASE,          90));
+    negativeRange.insert(std::pair<Joints, uint8_t>(SHOULDER,      30));
+    negativeRange.insert(std::pair<Joints, uint8_t>(ELBOW,         0));
+    negativeRange.insert(std::pair<Joints, uint8_t>(WRIST_UP_DOWN, 90));
+    negativeRange.insert(std::pair<Joints, uint8_t>(GRIPPER,       0));
+    negativeRange.insert(std::pair<Joints, uint8_t>(WRIST_ROTATE,  90));
 
+    /// Initialise the other two vectors with a valid position for every joint.
     currentPositions.insert(std::pair<Joints, uint16_t>(BASE,          0));
     currentPositions.insert(std::pair<Joints, uint16_t>(SHOULDER,      0));
     currentPositions.insert(std::pair<Joints, uint16_t>(ELBOW,         0));
     currentPositions.insert(std::pair<Joints, uint16_t>(WRIST_UP_DOWN, 0));
     currentPositions.insert(std::pair<Joints, uint16_t>(GRIPPER,       0));
     currentPositions.insert(std::pair<Joints, uint16_t>(WRIST_ROTATE,  0));
-
     goalPositions.insert(std::pair<Joints, uint16_t>(BASE,          0));
     goalPositions.insert(std::pair<Joints, uint16_t>(SHOULDER,      0));
     goalPositions.insert(std::pair<Joints, uint16_t>(ELBOW,         0));
@@ -90,9 +92,9 @@ uint8_t HighLevelDriver::getOffsetForJoint(Joints joint)
 {
     uint8_t offset = 0;
     // If the map contains an entry for the given joint, return the set value
-    if (angleOffsets.find(joint) != angleOffsets.end())
+    if (negativeRange.find(joint) != negativeRange.end())
     {
-        offset = angleOffsets.at(joint);
+        offset = negativeRange.at(joint);
     }
     return offset;
 }
