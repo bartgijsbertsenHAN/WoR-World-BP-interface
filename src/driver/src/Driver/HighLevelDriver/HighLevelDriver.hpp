@@ -2,8 +2,8 @@
 
 #include <map>
 #include <cstdint>
-#include "IDriver.hpp"
-#include "LowLevelDriver.hpp"
+#include "../IDriver.hpp"
+#include "../LowLevelDriver/LowLevelDriver.hpp"
 
 // Doxygen descriptions are inherited
 class HighLevelDriver : IDriver
