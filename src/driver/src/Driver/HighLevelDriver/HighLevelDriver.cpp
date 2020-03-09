@@ -29,7 +29,7 @@ HighLevelDriver::HighLevelDriver(std::string port)
 
 void HighLevelDriver::setJointAngle(Joints joint, int16_t degrees, float speedInPercent)
 {
-    lowLevelDriver.setJointPwm(joint, degToPwm(degrees, getOffsetForJoint(joint)), speedInPercent * 655.35);
+    lowLevelDriver.setJointPwm(joint, degToPwm(degrees, getNegativeRangeForJoint(joint)), speedInPercent * 655.35);
 }
 
 void HighLevelDriver::setTimeToComplete(int timeInMs)
@@ -60,17 +60,17 @@ void HighLevelDriver::emergencyStop()
 
 uint16_t HighLevelDriver::getMinAngle(Joints joint)
 {
-    return pwmToDeg(lowLevelDriver.getMinPwm(joint), getOffsetForJoint(joint));
+    return pwmToDeg(lowLevelDriver.getMinPwm(joint), getNegativeRangeForJoint(joint));
 }
 
 uint16_t HighLevelDriver::getMaxAngle(Joints joint)
 {
-    return pwmToDeg(lowLevelDriver.getMaxPwm(joint), getOffsetForJoint(joint));
+    return pwmToDeg(lowLevelDriver.getMaxPwm(joint), getNegativeRangeForJoint(joint));
 }
 
-int16_t HighLevelDriver::pwmToDeg(uint16_t pwm, int8_t offset)
+int16_t HighLevelDriver::pwmToDeg(uint16_t pwm, int8_t negativeRange)
 {
-    pwm -= offset;
+    pwm -= negativeRange;
     const int16_t  IN_MIN = 500;
     const int16_t  IN_MAX = 2500;
     const uint16_t OUT_MIN = 0;
@@ -78,9 +78,9 @@ int16_t HighLevelDriver::pwmToDeg(uint16_t pwm, int8_t offset)
     return (pwm - IN_MIN) * (OUT_MAX - OUT_MIN) / (IN_MAX - IN_MIN) + OUT_MIN;
 }
 
-uint16_t HighLevelDriver::degToPwm(int16_t deg, int8_t offset)
+uint16_t HighLevelDriver::degToPwm(int16_t deg, int8_t negativeRange)
 {
-    deg += offset;
+    deg += negativeRange;
     const int16_t  IN_MIN = 0;
     const int16_t  IN_MAX = 180;
     const uint16_t OUT_MIN = 500;
@@ -88,13 +88,13 @@ uint16_t HighLevelDriver::degToPwm(int16_t deg, int8_t offset)
     return (deg - IN_MIN) * (OUT_MAX - OUT_MIN) / (IN_MAX - IN_MIN) + OUT_MIN;
 }
 
-uint8_t HighLevelDriver::getOffsetForJoint(Joints joint)
+uint8_t HighLevelDriver::getNegativeRangeForJoint(Joints joint)
 {
-    uint8_t offset = 0;
+    uint8_t negativeRange = 0;
     // If the map contains an entry for the given joint, return the set value
     if (negativeRange.find(joint) != negativeRange.end())
     {
-        offset = negativeRange.at(joint);
+        negativeRange = negativeRange.at(joint);
     }
-    return offset;
+    return negativeRange;
 }

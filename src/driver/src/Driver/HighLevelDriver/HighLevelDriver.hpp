@@ -21,11 +21,11 @@ public:
     uint16_t getMaxAngle(Joints joint);
 
 private:
-    int16_t pwmToDeg(uint16_t pwm, int8_t offset);
+    int16_t pwmToDeg(uint16_t pwm, int8_t negativeRange);
 public:
-    uint16_t degToPwm(int16_t deg, int8_t offset);
+    uint16_t degToPwm(int16_t deg, int8_t negativeRange);
 
-    uint8_t getOffsetForJoint(Joints joint);
+    uint8_t getNegativeRangeForJoint(Joints joint);
 private:
     /// This variable stores how much of the possible 180 degrees of freedom are within the negative range
     /// I.e. A value of 90 has a range from -90 degrees to 90 degrees
