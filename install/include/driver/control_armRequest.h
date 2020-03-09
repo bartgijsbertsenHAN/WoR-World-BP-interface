@@ -24,74 +24,24 @@ struct control_armRequest_
   typedef control_armRequest_<ContainerAllocator> Type;
 
   control_armRequest_()
-    : base_angle(0)
-    , base_speed(0)
-    , shoulder_angle(0)
-    , shoulder_speed(0)
-    , elbow_angle(0)
-    , elbow_speed(0)
-    , wrist_angle(0)
-    , wrist_speed(0)
-    , gripper_angle(0)
-    , gripper_speed(0)
-    , wrist_rotate_angle(0)
-    , wrist_rotate_speed(0)
+    : angles()
+    , speeds()
     , time(0)  {
     }
   control_armRequest_(const ContainerAllocator& _alloc)
-    : base_angle(0)
-    , base_speed(0)
-    , shoulder_angle(0)
-    , shoulder_speed(0)
-    , elbow_angle(0)
-    , elbow_speed(0)
-    , wrist_angle(0)
-    , wrist_speed(0)
-    , gripper_angle(0)
-    , gripper_speed(0)
-    , wrist_rotate_angle(0)
-    , wrist_rotate_speed(0)
+    : angles(_alloc)
+    , speeds(_alloc)
     , time(0)  {
   (void)_alloc;
     }
 
 
 
-   typedef int16_t _base_angle_type;
-  _base_angle_type base_angle;
+   typedef std::vector<int16_t, typename ContainerAllocator::template rebind<int16_t>::other >  _angles_type;
+  _angles_type angles;
 
-   typedef uint8_t _base_speed_type;
-  _base_speed_type base_speed;
-
-   typedef int16_t _shoulder_angle_type;
-  _shoulder_angle_type shoulder_angle;
-
-   typedef uint8_t _shoulder_speed_type;
-  _shoulder_speed_type shoulder_speed;
-
-   typedef int16_t _elbow_angle_type;
-  _elbow_angle_type elbow_angle;
-
-   typedef uint8_t _elbow_speed_type;
-  _elbow_speed_type elbow_speed;
-
-   typedef int16_t _wrist_angle_type;
-  _wrist_angle_type wrist_angle;
-
-   typedef uint8_t _wrist_speed_type;
-  _wrist_speed_type wrist_speed;
-
-   typedef int16_t _gripper_angle_type;
-  _gripper_angle_type gripper_angle;
-
-   typedef uint8_t _gripper_speed_type;
-  _gripper_speed_type gripper_speed;
-
-   typedef int16_t _wrist_rotate_angle_type;
-  _wrist_rotate_angle_type wrist_rotate_angle;
-
-   typedef uint8_t _wrist_rotate_speed_type;
-  _wrist_rotate_speed_type wrist_rotate_speed;
+   typedef std::vector<uint8_t, typename ContainerAllocator::template rebind<uint8_t>::other >  _speeds_type;
+  _speeds_type speeds;
 
    typedef uint16_t _time_type;
   _time_type time;
@@ -130,7 +80,7 @@ namespace message_traits
 
 
 
-// BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
+// BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
 // {'std_msgs': ['/opt/ros/melodic/share/std_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
@@ -140,12 +90,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::driver::control_armRequest_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::driver::control_armRequest_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
@@ -174,12 +124,12 @@ struct MD5Sum< ::driver::control_armRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "cd10510da7b0daa1c1d87a003f9b006d";
+    return "f2060963bec26b478635ecaf1f13b9fd";
   }
 
   static const char* value(const ::driver::control_armRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xcd10510da7b0daa1ULL;
-  static const uint64_t static_value2 = 0xc1d87a003f9b006dULL;
+  static const uint64_t static_value1 = 0xf2060963bec26b47ULL;
+  static const uint64_t static_value2 = 0x8635ecaf1f13b9fdULL;
 };
 
 template<class ContainerAllocator>
@@ -198,18 +148,8 @@ struct Definition< ::driver::control_armRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "int16 base_angle\n"
-"uint8 base_speed\n"
-"int16 shoulder_angle\n"
-"uint8 shoulder_speed\n"
-"int16 elbow_angle\n"
-"uint8 elbow_speed\n"
-"int16 wrist_angle\n"
-"uint8 wrist_speed\n"
-"int16 gripper_angle\n"
-"uint8 gripper_speed\n"
-"int16 wrist_rotate_angle\n"
-"uint8 wrist_rotate_speed\n"
+    return "int16[] angles\n"
+"uint8[] speeds\n"
 "uint16 time\n"
 ;
   }
@@ -229,18 +169,8 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.base_angle);
-      stream.next(m.base_speed);
-      stream.next(m.shoulder_angle);
-      stream.next(m.shoulder_speed);
-      stream.next(m.elbow_angle);
-      stream.next(m.elbow_speed);
-      stream.next(m.wrist_angle);
-      stream.next(m.wrist_speed);
-      stream.next(m.gripper_angle);
-      stream.next(m.gripper_speed);
-      stream.next(m.wrist_rotate_angle);
-      stream.next(m.wrist_rotate_speed);
+      stream.next(m.angles);
+      stream.next(m.speeds);
       stream.next(m.time);
     }
 
@@ -260,30 +190,18 @@ struct Printer< ::driver::control_armRequest_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::driver::control_armRequest_<ContainerAllocator>& v)
   {
-    s << indent << "base_angle: ";
-    Printer<int16_t>::stream(s, indent + "  ", v.base_angle);
-    s << indent << "base_speed: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.base_speed);
-    s << indent << "shoulder_angle: ";
-    Printer<int16_t>::stream(s, indent + "  ", v.shoulder_angle);
-    s << indent << "shoulder_speed: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.shoulder_speed);
-    s << indent << "elbow_angle: ";
-    Printer<int16_t>::stream(s, indent + "  ", v.elbow_angle);
-    s << indent << "elbow_speed: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.elbow_speed);
-    s << indent << "wrist_angle: ";
-    Printer<int16_t>::stream(s, indent + "  ", v.wrist_angle);
-    s << indent << "wrist_speed: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.wrist_speed);
-    s << indent << "gripper_angle: ";
-    Printer<int16_t>::stream(s, indent + "  ", v.gripper_angle);
-    s << indent << "gripper_speed: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.gripper_speed);
-    s << indent << "wrist_rotate_angle: ";
-    Printer<int16_t>::stream(s, indent + "  ", v.wrist_rotate_angle);
-    s << indent << "wrist_rotate_speed: ";
-    Printer<uint8_t>::stream(s, indent + "  ", v.wrist_rotate_speed);
+    s << indent << "angles[]" << std::endl;
+    for (size_t i = 0; i < v.angles.size(); ++i)
+    {
+      s << indent << "  angles[" << i << "]: ";
+      Printer<int16_t>::stream(s, indent + "  ", v.angles[i]);
+    }
+    s << indent << "speeds[]" << std::endl;
+    for (size_t i = 0; i < v.speeds.size(); ++i)
+    {
+      s << indent << "  speeds[" << i << "]: ";
+      Printer<uint8_t>::stream(s, indent + "  ", v.speeds[i]);
+    }
     s << indent << "time: ";
     Printer<uint16_t>::stream(s, indent + "  ", v.time);
   }

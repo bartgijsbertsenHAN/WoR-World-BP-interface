@@ -24,42 +24,17 @@ struct config_armRequest_
   typedef config_armRequest_<ContainerAllocator> Type;
 
   config_armRequest_()
-    : base_angle_offset(0)
-    , shoulder_angle_offset(0)
-    , elbow_angle_offset(0)
-    , wrist_angle_offset(0)
-    , gripper_angle_offset(0)
-    , wrist_rotate_angle_offset(0)  {
+    : angle_offsets()  {
     }
   config_armRequest_(const ContainerAllocator& _alloc)
-    : base_angle_offset(0)
-    , shoulder_angle_offset(0)
-    , elbow_angle_offset(0)
-    , wrist_angle_offset(0)
-    , gripper_angle_offset(0)
-    , wrist_rotate_angle_offset(0)  {
+    : angle_offsets(_alloc)  {
   (void)_alloc;
     }
 
 
 
-   typedef int8_t _base_angle_offset_type;
-  _base_angle_offset_type base_angle_offset;
-
-   typedef int8_t _shoulder_angle_offset_type;
-  _shoulder_angle_offset_type shoulder_angle_offset;
-
-   typedef int8_t _elbow_angle_offset_type;
-  _elbow_angle_offset_type elbow_angle_offset;
-
-   typedef int8_t _wrist_angle_offset_type;
-  _wrist_angle_offset_type wrist_angle_offset;
-
-   typedef int8_t _gripper_angle_offset_type;
-  _gripper_angle_offset_type gripper_angle_offset;
-
-   typedef int8_t _wrist_rotate_angle_offset_type;
-  _wrist_rotate_angle_offset_type wrist_rotate_angle_offset;
+   typedef std::vector<int8_t, typename ContainerAllocator::template rebind<int8_t>::other >  _angle_offsets_type;
+  _angle_offsets_type angle_offsets;
 
 
 
@@ -95,7 +70,7 @@ namespace message_traits
 
 
 
-// BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
+// BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
 // {'std_msgs': ['/opt/ros/melodic/share/std_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
@@ -105,12 +80,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::driver::config_armRequest_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::driver::config_armRequest_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
@@ -139,12 +114,12 @@ struct MD5Sum< ::driver::config_armRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "ea70cecd00e14397f55e308d906e14d3";
+    return "4c19c548d8915eb1b329adf0e59179cb";
   }
 
   static const char* value(const ::driver::config_armRequest_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xea70cecd00e14397ULL;
-  static const uint64_t static_value2 = 0xf55e308d906e14d3ULL;
+  static const uint64_t static_value1 = 0x4c19c548d8915eb1ULL;
+  static const uint64_t static_value2 = 0xb329adf0e59179cbULL;
 };
 
 template<class ContainerAllocator>
@@ -163,12 +138,7 @@ struct Definition< ::driver::config_armRequest_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "int8 base_angle_offset\n"
-"int8 shoulder_angle_offset\n"
-"int8 elbow_angle_offset\n"
-"int8 wrist_angle_offset\n"
-"int8 gripper_angle_offset\n"
-"int8 wrist_rotate_angle_offset\n"
+    return "int8[] angle_offsets\n"
 ;
   }
 
@@ -187,12 +157,7 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.base_angle_offset);
-      stream.next(m.shoulder_angle_offset);
-      stream.next(m.elbow_angle_offset);
-      stream.next(m.wrist_angle_offset);
-      stream.next(m.gripper_angle_offset);
-      stream.next(m.wrist_rotate_angle_offset);
+      stream.next(m.angle_offsets);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -211,18 +176,12 @@ struct Printer< ::driver::config_armRequest_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::driver::config_armRequest_<ContainerAllocator>& v)
   {
-    s << indent << "base_angle_offset: ";
-    Printer<int8_t>::stream(s, indent + "  ", v.base_angle_offset);
-    s << indent << "shoulder_angle_offset: ";
-    Printer<int8_t>::stream(s, indent + "  ", v.shoulder_angle_offset);
-    s << indent << "elbow_angle_offset: ";
-    Printer<int8_t>::stream(s, indent + "  ", v.elbow_angle_offset);
-    s << indent << "wrist_angle_offset: ";
-    Printer<int8_t>::stream(s, indent + "  ", v.wrist_angle_offset);
-    s << indent << "gripper_angle_offset: ";
-    Printer<int8_t>::stream(s, indent + "  ", v.gripper_angle_offset);
-    s << indent << "wrist_rotate_angle_offset: ";
-    Printer<int8_t>::stream(s, indent + "  ", v.wrist_rotate_angle_offset);
+    s << indent << "angle_offsets[]" << std::endl;
+    for (size_t i = 0; i < v.angle_offsets.size(); ++i)
+    {
+      s << indent << "  angle_offsets[" << i << "]: ";
+      Printer<int8_t>::stream(s, indent + "  ", v.angle_offsets[i]);
+    }
   }
 };
 

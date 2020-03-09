@@ -40,7 +40,7 @@ template<>
 struct MD5Sum< ::driver::control_arm > {
   static const char* value()
   {
-    return "2830068845fb2505b4060ad2eb804a4f";
+    return "9f92a49c54ce202a35ae4e75b5fee653";
   }
 
   static const char* value(const ::driver::control_arm&) { return value(); }

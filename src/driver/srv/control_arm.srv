@@ -1,15 +1,5 @@
-int16 base_angle
-uint8 base_speed
-int16 shoulder_angle
-uint8 shoulder_speed
-int16 elbow_angle
-uint8 elbow_speed
-int16 wrist_angle
-uint8 wrist_speed
-int16 gripper_angle
-uint8 gripper_speed
-int16 wrist_rotate_angle
-uint8 wrist_rotate_speed
+int16[] angles
+uint8[] speeds
 uint16 time
 ---
 bool succes

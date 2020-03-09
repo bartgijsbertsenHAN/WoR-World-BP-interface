@@ -7,25 +7,15 @@ import struct
 
 
 class control_armRequest(genpy.Message):
-  _md5sum = "cd10510da7b0daa1c1d87a003f9b006d"
+  _md5sum = "f2060963bec26b478635ecaf1f13b9fd"
   _type = "driver/control_armRequest"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """int16 base_angle
-uint8 base_speed
-int16 shoulder_angle
-uint8 shoulder_speed
-int16 elbow_angle
-uint8 elbow_speed
-int16 wrist_angle
-uint8 wrist_speed
-int16 gripper_angle
-uint8 gripper_speed
-int16 wrist_rotate_angle
-uint8 wrist_rotate_speed
+  _full_text = """int16[] angles
+uint8[] speeds
 uint16 time
 """
-  __slots__ = ['base_angle','base_speed','shoulder_angle','shoulder_speed','elbow_angle','elbow_speed','wrist_angle','wrist_speed','gripper_angle','gripper_speed','wrist_rotate_angle','wrist_rotate_speed','time']
-  _slot_types = ['int16','uint8','int16','uint8','int16','uint8','int16','uint8','int16','uint8','int16','uint8','uint16']
+  __slots__ = ['angles','speeds','time']
+  _slot_types = ['int16[]','uint8[]','uint16']
 
   def __init__(self, *args, **kwds):
     """
@@ -35,7 +25,7 @@ uint16 time
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       base_angle,base_speed,shoulder_angle,shoulder_speed,elbow_angle,elbow_speed,wrist_angle,wrist_speed,gripper_angle,gripper_speed,wrist_rotate_angle,wrist_rotate_speed,time
+       angles,speeds,time
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -44,45 +34,15 @@ uint16 time
     if args or kwds:
       super(control_armRequest, self).__init__(*args, **kwds)
       #message fields cannot be None, assign default values for those that are
-      if self.base_angle is None:
-        self.base_angle = 0
-      if self.base_speed is None:
-        self.base_speed = 0
-      if self.shoulder_angle is None:
-        self.shoulder_angle = 0
-      if self.shoulder_speed is None:
-        self.shoulder_speed = 0
-      if self.elbow_angle is None:
-        self.elbow_angle = 0
-      if self.elbow_speed is None:
-        self.elbow_speed = 0
-      if self.wrist_angle is None:
-        self.wrist_angle = 0
-      if self.wrist_speed is None:
-        self.wrist_speed = 0
-      if self.gripper_angle is None:
-        self.gripper_angle = 0
-      if self.gripper_speed is None:
-        self.gripper_speed = 0
-      if self.wrist_rotate_angle is None:
-        self.wrist_rotate_angle = 0
-      if self.wrist_rotate_speed is None:
-        self.wrist_rotate_speed = 0
+      if self.angles is None:
+        self.angles = []
+      if self.speeds is None:
+        self.speeds = b''
       if self.time is None:
         self.time = 0
     else:
-      self.base_angle = 0
-      self.base_speed = 0
-      self.shoulder_angle = 0
-      self.shoulder_speed = 0
-      self.elbow_angle = 0
-      self.elbow_speed = 0
-      self.wrist_angle = 0
-      self.wrist_speed = 0
-      self.gripper_angle = 0
-      self.gripper_speed = 0
-      self.wrist_rotate_angle = 0
-      self.wrist_rotate_speed = 0
+      self.angles = []
+      self.speeds = b''
       self.time = 0
 
   def _get_types(self):
@@ -97,8 +57,18 @@ uint16 time
     :param buff: buffer, ``StringIO``
     """
     try:
-      _x = self
-      buff.write(_get_struct_hBhBhBhBhBhBH().pack(_x.base_angle, _x.base_speed, _x.shoulder_angle, _x.shoulder_speed, _x.elbow_angle, _x.elbow_speed, _x.wrist_angle, _x.wrist_speed, _x.gripper_angle, _x.gripper_speed, _x.wrist_rotate_angle, _x.wrist_rotate_speed, _x.time))
+      length = len(self.angles)
+      buff.write(_struct_I.pack(length))
+      pattern = '<%sh'%length
+      buff.write(struct.pack(pattern, *self.angles))
+      _x = self.speeds
+      length = len(_x)
+      # - if encoded as a list instead, serialize as bytes instead of string
+      if type(_x) in [list, tuple]:
+        buff.write(struct.pack('<I%sB'%length, length, *_x))
+      else:
+        buff.write(struct.pack('<I%ss'%length, length, _x))
+      buff.write(_get_struct_H().pack(self.time))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -109,10 +79,22 @@ uint16 time
     """
     try:
       end = 0
-      _x = self
       start = end
-      end += 20
-      (_x.base_angle, _x.base_speed, _x.shoulder_angle, _x.shoulder_speed, _x.elbow_angle, _x.elbow_speed, _x.wrist_angle, _x.wrist_speed, _x.gripper_angle, _x.gripper_speed, _x.wrist_rotate_angle, _x.wrist_rotate_speed, _x.time,) = _get_struct_hBhBhBhBhBhBH().unpack(str[start:end])
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      pattern = '<%sh'%length
+      start = end
+      end += struct.calcsize(pattern)
+      self.angles = struct.unpack(pattern, str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      self.speeds = str[start:end]
+      start = end
+      end += 2
+      (self.time,) = _get_struct_H().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -125,8 +107,18 @@ uint16 time
     :param numpy: numpy python module
     """
     try:
-      _x = self
-      buff.write(_get_struct_hBhBhBhBhBhBH().pack(_x.base_angle, _x.base_speed, _x.shoulder_angle, _x.shoulder_speed, _x.elbow_angle, _x.elbow_speed, _x.wrist_angle, _x.wrist_speed, _x.gripper_angle, _x.gripper_speed, _x.wrist_rotate_angle, _x.wrist_rotate_speed, _x.time))
+      length = len(self.angles)
+      buff.write(_struct_I.pack(length))
+      pattern = '<%sh'%length
+      buff.write(self.angles.tostring())
+      _x = self.speeds
+      length = len(_x)
+      # - if encoded as a list instead, serialize as bytes instead of string
+      if type(_x) in [list, tuple]:
+        buff.write(struct.pack('<I%sB'%length, length, *_x))
+      else:
+        buff.write(struct.pack('<I%ss'%length, length, _x))
+      buff.write(_get_struct_H().pack(self.time))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -138,10 +130,22 @@ uint16 time
     """
     try:
       end = 0
-      _x = self
       start = end
-      end += 20
-      (_x.base_angle, _x.base_speed, _x.shoulder_angle, _x.shoulder_speed, _x.elbow_angle, _x.elbow_speed, _x.wrist_angle, _x.wrist_speed, _x.gripper_angle, _x.gripper_speed, _x.wrist_rotate_angle, _x.wrist_rotate_speed, _x.time,) = _get_struct_hBhBhBhBhBhBH().unpack(str[start:end])
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      pattern = '<%sh'%length
+      start = end
+      end += struct.calcsize(pattern)
+      self.angles = numpy.frombuffer(str[start:end], dtype=numpy.int16, count=length)
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      self.speeds = str[start:end]
+      start = end
+      end += 2
+      (self.time,) = _get_struct_H().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -150,12 +154,12 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_hBhBhBhBhBhBH = None
-def _get_struct_hBhBhBhBhBhBH():
-    global _struct_hBhBhBhBhBhBH
-    if _struct_hBhBhBhBhBhBH is None:
-        _struct_hBhBhBhBhBhBH = struct.Struct("<hBhBhBhBhBhBH")
-    return _struct_hBhBhBhBhBhBH
+_struct_H = None
+def _get_struct_H():
+    global _struct_H
+    if _struct_H is None:
+        _struct_H = struct.Struct("<H")
+    return _struct_H
 # This Python file uses the following encoding: utf-8
 """autogenerated by genpy from driver/control_armResponse.msg. Do not edit."""
 import sys
@@ -266,6 +270,6 @@ def _get_struct_B():
     return _struct_B
 class control_arm(object):
   _type          = 'driver/control_arm'
-  _md5sum = '2830068845fb2505b4060ad2eb804a4f'
+  _md5sum = '9f92a49c54ce202a35ae4e75b5fee653'
   _request_class  = control_armRequest
   _response_class = control_armResponse

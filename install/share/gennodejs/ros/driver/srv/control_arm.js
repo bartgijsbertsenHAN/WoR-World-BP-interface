@@ -21,92 +21,22 @@ class control_armRequest {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.base_angle = null;
-      this.base_speed = null;
-      this.shoulder_angle = null;
-      this.shoulder_speed = null;
-      this.elbow_angle = null;
-      this.elbow_speed = null;
-      this.wrist_angle = null;
-      this.wrist_speed = null;
-      this.gripper_angle = null;
-      this.gripper_speed = null;
-      this.wrist_rotate_angle = null;
-      this.wrist_rotate_speed = null;
+      this.angles = null;
+      this.speeds = null;
       this.time = null;
     }
     else {
-      if (initObj.hasOwnProperty('base_angle')) {
-        this.base_angle = initObj.base_angle
+      if (initObj.hasOwnProperty('angles')) {
+        this.angles = initObj.angles
       }
       else {
-        this.base_angle = 0;
+        this.angles = [];
       }
-      if (initObj.hasOwnProperty('base_speed')) {
-        this.base_speed = initObj.base_speed
-      }
-      else {
-        this.base_speed = 0;
-      }
-      if (initObj.hasOwnProperty('shoulder_angle')) {
-        this.shoulder_angle = initObj.shoulder_angle
+      if (initObj.hasOwnProperty('speeds')) {
+        this.speeds = initObj.speeds
       }
       else {
-        this.shoulder_angle = 0;
-      }
-      if (initObj.hasOwnProperty('shoulder_speed')) {
-        this.shoulder_speed = initObj.shoulder_speed
-      }
-      else {
-        this.shoulder_speed = 0;
-      }
-      if (initObj.hasOwnProperty('elbow_angle')) {
-        this.elbow_angle = initObj.elbow_angle
-      }
-      else {
-        this.elbow_angle = 0;
-      }
-      if (initObj.hasOwnProperty('elbow_speed')) {
-        this.elbow_speed = initObj.elbow_speed
-      }
-      else {
-        this.elbow_speed = 0;
-      }
-      if (initObj.hasOwnProperty('wrist_angle')) {
-        this.wrist_angle = initObj.wrist_angle
-      }
-      else {
-        this.wrist_angle = 0;
-      }
-      if (initObj.hasOwnProperty('wrist_speed')) {
-        this.wrist_speed = initObj.wrist_speed
-      }
-      else {
-        this.wrist_speed = 0;
-      }
-      if (initObj.hasOwnProperty('gripper_angle')) {
-        this.gripper_angle = initObj.gripper_angle
-      }
-      else {
-        this.gripper_angle = 0;
-      }
-      if (initObj.hasOwnProperty('gripper_speed')) {
-        this.gripper_speed = initObj.gripper_speed
-      }
-      else {
-        this.gripper_speed = 0;
-      }
-      if (initObj.hasOwnProperty('wrist_rotate_angle')) {
-        this.wrist_rotate_angle = initObj.wrist_rotate_angle
-      }
-      else {
-        this.wrist_rotate_angle = 0;
-      }
-      if (initObj.hasOwnProperty('wrist_rotate_speed')) {
-        this.wrist_rotate_speed = initObj.wrist_rotate_speed
-      }
-      else {
-        this.wrist_rotate_speed = 0;
+        this.speeds = [];
       }
       if (initObj.hasOwnProperty('time')) {
         this.time = initObj.time
@@ -119,30 +49,10 @@ class control_armRequest {
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type control_armRequest
-    // Serialize message field [base_angle]
-    bufferOffset = _serializer.int16(obj.base_angle, buffer, bufferOffset);
-    // Serialize message field [base_speed]
-    bufferOffset = _serializer.uint8(obj.base_speed, buffer, bufferOffset);
-    // Serialize message field [shoulder_angle]
-    bufferOffset = _serializer.int16(obj.shoulder_angle, buffer, bufferOffset);
-    // Serialize message field [shoulder_speed]
-    bufferOffset = _serializer.uint8(obj.shoulder_speed, buffer, bufferOffset);
-    // Serialize message field [elbow_angle]
-    bufferOffset = _serializer.int16(obj.elbow_angle, buffer, bufferOffset);
-    // Serialize message field [elbow_speed]
-    bufferOffset = _serializer.uint8(obj.elbow_speed, buffer, bufferOffset);
-    // Serialize message field [wrist_angle]
-    bufferOffset = _serializer.int16(obj.wrist_angle, buffer, bufferOffset);
-    // Serialize message field [wrist_speed]
-    bufferOffset = _serializer.uint8(obj.wrist_speed, buffer, bufferOffset);
-    // Serialize message field [gripper_angle]
-    bufferOffset = _serializer.int16(obj.gripper_angle, buffer, bufferOffset);
-    // Serialize message field [gripper_speed]
-    bufferOffset = _serializer.uint8(obj.gripper_speed, buffer, bufferOffset);
-    // Serialize message field [wrist_rotate_angle]
-    bufferOffset = _serializer.int16(obj.wrist_rotate_angle, buffer, bufferOffset);
-    // Serialize message field [wrist_rotate_speed]
-    bufferOffset = _serializer.uint8(obj.wrist_rotate_speed, buffer, bufferOffset);
+    // Serialize message field [angles]
+    bufferOffset = _arraySerializer.int16(obj.angles, buffer, bufferOffset, null);
+    // Serialize message field [speeds]
+    bufferOffset = _arraySerializer.uint8(obj.speeds, buffer, bufferOffset, null);
     // Serialize message field [time]
     bufferOffset = _serializer.uint16(obj.time, buffer, bufferOffset);
     return bufferOffset;
@@ -152,37 +62,20 @@ class control_armRequest {
     //deserializes a message object of type control_armRequest
     let len;
     let data = new control_armRequest(null);
-    // Deserialize message field [base_angle]
-    data.base_angle = _deserializer.int16(buffer, bufferOffset);
-    // Deserialize message field [base_speed]
-    data.base_speed = _deserializer.uint8(buffer, bufferOffset);
-    // Deserialize message field [shoulder_angle]
-    data.shoulder_angle = _deserializer.int16(buffer, bufferOffset);
-    // Deserialize message field [shoulder_speed]
-    data.shoulder_speed = _deserializer.uint8(buffer, bufferOffset);
-    // Deserialize message field [elbow_angle]
-    data.elbow_angle = _deserializer.int16(buffer, bufferOffset);
-    // Deserialize message field [elbow_speed]
-    data.elbow_speed = _deserializer.uint8(buffer, bufferOffset);
-    // Deserialize message field [wrist_angle]
-    data.wrist_angle = _deserializer.int16(buffer, bufferOffset);
-    // Deserialize message field [wrist_speed]
-    data.wrist_speed = _deserializer.uint8(buffer, bufferOffset);
-    // Deserialize message field [gripper_angle]
-    data.gripper_angle = _deserializer.int16(buffer, bufferOffset);
-    // Deserialize message field [gripper_speed]
-    data.gripper_speed = _deserializer.uint8(buffer, bufferOffset);
-    // Deserialize message field [wrist_rotate_angle]
-    data.wrist_rotate_angle = _deserializer.int16(buffer, bufferOffset);
-    // Deserialize message field [wrist_rotate_speed]
-    data.wrist_rotate_speed = _deserializer.uint8(buffer, bufferOffset);
+    // Deserialize message field [angles]
+    data.angles = _arrayDeserializer.int16(buffer, bufferOffset, null)
+    // Deserialize message field [speeds]
+    data.speeds = _arrayDeserializer.uint8(buffer, bufferOffset, null)
     // Deserialize message field [time]
     data.time = _deserializer.uint16(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 20;
+    let length = 0;
+    length += 2 * object.angles.length;
+    length += object.speeds.length;
+    return length + 10;
   }
 
   static datatype() {
@@ -192,24 +85,14 @@ class control_armRequest {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'cd10510da7b0daa1c1d87a003f9b006d';
+    return 'f2060963bec26b478635ecaf1f13b9fd';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    int16 base_angle
-    uint8 base_speed
-    int16 shoulder_angle
-    uint8 shoulder_speed
-    int16 elbow_angle
-    uint8 elbow_speed
-    int16 wrist_angle
-    uint8 wrist_speed
-    int16 gripper_angle
-    uint8 gripper_speed
-    int16 wrist_rotate_angle
-    uint8 wrist_rotate_speed
+    int16[] angles
+    uint8[] speeds
     uint16 time
     
     `;
@@ -221,88 +104,18 @@ class control_armRequest {
       msg = {};
     }
     const resolved = new control_armRequest(null);
-    if (msg.base_angle !== undefined) {
-      resolved.base_angle = msg.base_angle;
+    if (msg.angles !== undefined) {
+      resolved.angles = msg.angles;
     }
     else {
-      resolved.base_angle = 0
+      resolved.angles = []
     }
 
-    if (msg.base_speed !== undefined) {
-      resolved.base_speed = msg.base_speed;
+    if (msg.speeds !== undefined) {
+      resolved.speeds = msg.speeds;
     }
     else {
-      resolved.base_speed = 0
-    }
-
-    if (msg.shoulder_angle !== undefined) {
-      resolved.shoulder_angle = msg.shoulder_angle;
-    }
-    else {
-      resolved.shoulder_angle = 0
-    }
-
-    if (msg.shoulder_speed !== undefined) {
-      resolved.shoulder_speed = msg.shoulder_speed;
-    }
-    else {
-      resolved.shoulder_speed = 0
-    }
-
-    if (msg.elbow_angle !== undefined) {
-      resolved.elbow_angle = msg.elbow_angle;
-    }
-    else {
-      resolved.elbow_angle = 0
-    }
-
-    if (msg.elbow_speed !== undefined) {
-      resolved.elbow_speed = msg.elbow_speed;
-    }
-    else {
-      resolved.elbow_speed = 0
-    }
-
-    if (msg.wrist_angle !== undefined) {
-      resolved.wrist_angle = msg.wrist_angle;
-    }
-    else {
-      resolved.wrist_angle = 0
-    }
-
-    if (msg.wrist_speed !== undefined) {
-      resolved.wrist_speed = msg.wrist_speed;
-    }
-    else {
-      resolved.wrist_speed = 0
-    }
-
-    if (msg.gripper_angle !== undefined) {
-      resolved.gripper_angle = msg.gripper_angle;
-    }
-    else {
-      resolved.gripper_angle = 0
-    }
-
-    if (msg.gripper_speed !== undefined) {
-      resolved.gripper_speed = msg.gripper_speed;
-    }
-    else {
-      resolved.gripper_speed = 0
-    }
-
-    if (msg.wrist_rotate_angle !== undefined) {
-      resolved.wrist_rotate_angle = msg.wrist_rotate_angle;
-    }
-    else {
-      resolved.wrist_rotate_angle = 0
-    }
-
-    if (msg.wrist_rotate_speed !== undefined) {
-      resolved.wrist_rotate_speed = msg.wrist_rotate_speed;
-    }
-    else {
-      resolved.wrist_rotate_speed = 0
+      resolved.speeds = []
     }
 
     if (msg.time !== undefined) {
@@ -390,6 +203,6 @@ class control_armResponse {
 module.exports = {
   Request: control_armRequest,
   Response: control_armResponse,
-  md5sum() { return '2830068845fb2505b4060ad2eb804a4f'; },
+  md5sum() { return '9f92a49c54ce202a35ae4e75b5fee653'; },
   datatype() { return 'driver/control_arm'; }
 };

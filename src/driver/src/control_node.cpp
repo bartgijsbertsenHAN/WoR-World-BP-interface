@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     driver::control_arm srv_control;
     driver::config_arm srv_config;
 
-    //Add parser
+    //Add parser (remember values)
 
     if(client_contol.call(srv_control))
     {
