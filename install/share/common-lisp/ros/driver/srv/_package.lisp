@@ -1,6 +1,11 @@
 (cl:defpackage driver-srv
   (:use )
   (:export
+   "CONFIG_ARM"
+   "<CONFIG_ARM-REQUEST>"
+   "CONFIG_ARM-REQUEST"
+   "<CONFIG_ARM-RESPONSE>"
+   "CONFIG_ARM-RESPONSE"
    "CONTROL_ARM"
    "<CONTROL_ARM-REQUEST>"
    "CONTROL_ARM-REQUEST"

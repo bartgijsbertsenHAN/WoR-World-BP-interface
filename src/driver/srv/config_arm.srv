@@ -1,0 +1,8 @@
+int8 base_angle_offset
+int8 shoulder_angle_offset
+int8 elbow_angle_offset
+int8 wrist_angle_offset
+int8 gripper_angle_offset
+int8 wrist_rotate_angle_offset
+---
+bool succes

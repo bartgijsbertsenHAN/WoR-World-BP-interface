@@ -58,6 +58,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_service_files(
      FILES
      control_arm.srv
+     config_arm.srv
  )
 
 ## Generate actions in the 'action' folder
@@ -116,7 +117,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -136,7 +137,7 @@ include_directories(
 file(GLOB_RECURSE source_list_driver "DriverEnums.hpp" "HighLevelDriver.hpp" "HighLevelDriver.cpp" 
 "LowLevelDriver.hpp" "LowLevelDriver.cpp" "IDriver" "main.cpp")
 add_executable(driver_node ${source_list_driver})
-add_executable(client_node src/client_node.cpp)
+add_executable(control_node src/control_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -152,7 +153,9 @@ add_executable(client_node src/client_node.cpp)
  target_link_libraries(${PROJECT_NAME}_node
    ${catkin_LIBRARIES} pthread ${Boost_LIBRARIES}
  )
-
+target_link_libraries(control_node
+   ${catkin_LIBRARIES}
+ )
 #############
 ## Install ##
 #############
