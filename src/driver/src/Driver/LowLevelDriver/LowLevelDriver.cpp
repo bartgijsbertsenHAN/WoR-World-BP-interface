@@ -18,8 +18,8 @@ LowLevelDriver::LowLevelDriver(std::string port)
     minPwm.insert(std::pair<Joints, int>(WRIST_ROTATE, 500));
 
     maxPwm.insert(std::pair<Joints, int>(BASE, 2500));
-    maxPwm.insert(std::pair<Joints, int>(SHOULDER, 2500));
-    maxPwm.insert(std::pair<Joints, int>(ELBOW, 2500));
+    maxPwm.insert(std::pair<Joints, int>(SHOULDER, 1833));
+    maxPwm.insert(std::pair<Joints, int>(ELBOW, 2000));
     maxPwm.insert(std::pair<Joints, int>(WRIST_UP_DOWN, 2500));
     maxPwm.insert(std::pair<Joints, int>(GRIPPER, 2500));
     maxPwm.insert(std::pair<Joints, int>(WRIST_ROTATE, 2500));

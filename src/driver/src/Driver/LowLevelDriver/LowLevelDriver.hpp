@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <boost/asio.hpp>
-#include "DriverEnums.hpp"
+#include "../DriverEnums.hpp"
 
 /// @brief Deze klasse beheert direct de communicatie met de robotarm, zonder functionaliteit toe te voegen
 class LowLevelDriver
