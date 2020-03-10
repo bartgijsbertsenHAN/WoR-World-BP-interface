@@ -20,7 +20,8 @@ public:
     /// @param joint De enum waarde van het gewricht waar het commando naar toe wordt gestuurd
     /// @param pwm De PWM waarde die naar de servo wordt geschreven aan het einde van de beweging
     /// @param speed De maximale snelheid van de servo gedurende de beweging
-    void setJointPwm(Joints joint, uint16_t pwm, uint16_t speed = 65535);
+    /// @return of de pwm legatiem is
+    bool setJointPwm(Joints joint, uint16_t pwm, uint16_t speed = 65535);
 
     /// @brief De functie stelt de tijd in waarin de arm de beweging uitvoert.
     /// Roep deze functie aan als laatste functie voor sendCommand wordt aangeroepen.
@@ -31,7 +32,7 @@ public:
     /// @param joint De enum waarde van het gewricht wat wordt gekalibreerd
     /// @param offset De offset voor het gewricht als PWM waarde
     /// @return True als het bericht kan worden verzonden, false als het niet kan worden verzonden
-    bool setPositionOffset(Joints joint, int16_t offset);
+    bool setPositionOffset(Joints joint, int8_t offset);
 
     /// @brief Verstuurt het commando wat in de wachtrij staat, reset de wachtrij
     /// @return True als het bericht kan worden verzonden, false als het niet kan worden verzonden
@@ -65,4 +66,7 @@ private:
 
     /// @brief Slaat de port op als een string
     std::string port;
+
+    /// @brief Absolute maximale offset op een gewricht
+    uint8_t absMaxOffset;
 };

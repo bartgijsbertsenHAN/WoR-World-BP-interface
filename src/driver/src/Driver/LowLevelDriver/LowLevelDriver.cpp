@@ -6,7 +6,7 @@
 /// Voegt een standaard waarde van 500 toe aan ieder gewricht in de minPwm map.<br>
 /// Voegt een standaard waarde van 2500 toe aan ieder gewricht in de maxPwm map.<br>
 LowLevelDriver::LowLevelDriver(std::string port)
-    :minPwm(), maxPwm(), message(), port(port)
+    :minPwm(), maxPwm(), message(), port(port), absMaxOffset(100)
 {
     resetCommand();
 
@@ -30,7 +30,7 @@ LowLevelDriver::LowLevelDriver(std::string port)
 /// Controleer of de gegeven PWM waarde binnen het toegestane bereik valt.
 /// Als de PWM waarde buiten dit bereik valt, pas de waarde aan om binnen het bereik te passen.
 /// Schrijf de waardes naar de wachtrij
-void LowLevelDriver::setJointPwm(Joints joint, uint16_t pwm, uint16_t speed /* = 65535*/ )
+bool LowLevelDriver::setJointPwm(Joints joint, uint16_t pwm, uint16_t speed /* = 65535*/ )
 {
     std::map<Joints, uint16_t>::iterator jointLowestAllowedPwmIndex, jointHighestAllowedPwmIndex;
     int channel;
@@ -41,7 +41,7 @@ void LowLevelDriver::setJointPwm(Joints joint, uint16_t pwm, uint16_t speed /* =
     if (jointLowestAllowedPwmIndex == minPwm.end() ||
         jointHighestAllowedPwmIndex == maxPwm.end())
     {
-        return;
+        return false;
     }
 
     // Check if the PWM value is within the allowed range.
@@ -59,6 +59,7 @@ void LowLevelDriver::setJointPwm(Joints joint, uint16_t pwm, uint16_t speed /* =
     message += "#" + std::to_string(channel) +
                 "P" + std::to_string(pwm) +
                 "S" + std::to_string(speed);
+    return true;
 }
 
 void LowLevelDriver::setTimeToComplete(uint16_t timeInMs)
@@ -66,24 +67,21 @@ void LowLevelDriver::setTimeToComplete(uint16_t timeInMs)
     message += "T" + std::to_string(timeInMs);
 }
 
-/// Zorg er voor dat de offset binnen 15 graden ligt. (15 * 65535 / 180)
-bool LowLevelDriver::setPositionOffset(Joints joint, int16_t offset)
+
+bool LowLevelDriver::setPositionOffset(Joints joint, int8_t offset)
 {
     int channel = joint;
-    int16_t maxOffset = 15 * 65535 / 180;
-    if (offset > maxOffset)
+    // int16_t maxOffset = 15 * 65535 / 180;
+    if (abs(offset) > absMaxOffset)
     {
-        offset = maxOffset;
+        return false;
     }
-    if (offset < - maxOffset)
-    {
-        offset = - maxOffset;
-    }
+   
 
     resetCommand();
     message += "#" + std::to_string(channel) +
                 "PO" + std::to_string(offset);
-    sendCommand();
+    return true;
 }
 
 bool LowLevelDriver::sendCommand()

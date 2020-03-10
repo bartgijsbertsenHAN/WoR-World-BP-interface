@@ -11,14 +11,15 @@ class HighLevelDriver : IDriver
 public:
     HighLevelDriver(std::string port);
 
-    void setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0);
+    bool setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0);
     void setTimeToComplete(int timeInMs);
-    bool startMovement();
+    bool sendCommand();
     void resetQueue();
     float getProgressInPercent();
     void emergencyStop();
     uint16_t getMinAngle(Joints joint);
     uint16_t getMaxAngle(Joints joint);
+    bool setOffset(Joints joint, int8_t offset);
 
 private:
     int16_t pwmToDeg(uint16_t pwm, int8_t negativeRange);

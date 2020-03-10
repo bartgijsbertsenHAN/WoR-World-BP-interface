@@ -1,11 +1,11 @@
 #include <iostream>
 #include <thread>
 #include "ros/ros.h"
-#include "std_mgs/Empty.h"
+#include <std_msgs/Empty.h>
 #include "driver/control_arm.h"
 #include "driver/config_arm.h"
-#include "HighLevelDriver.hpp"
-#include "DriverEnum.hpp"
+#include "Driver/HighLevelDriver/HighLevelDriver.hpp"
+#include "Driver/DriverEnums.hpp"
 
 //Temporary empty string as port
 HighLevelDriver highlevel = HighLevelDriver(" "); 
@@ -18,26 +18,51 @@ void emergencyStopCall(const std_msgs::Empty::ConstPtr& msg)
 bool controlArm(driver::control_arm::Request  &req,
                 driver::control_arm::Response &res)
 {
-  for(int i = 0; i != req.angles.size(); ++i)
+  bool return_value = true;
+  for(int i = 0; i != req.order.size(); ++i)
   {
-    highlevel.setJointAngle(i, req.angles[i], req.speeds[i]);
+    if(highlevel.setJointAngle(static_cast<Joints>(req.order[i]), req.angles[i], req.speeds[i]))
+    {
+      res.possible[i] = true;
+    } 
+    else
+    {
+      return_value = false;
+      res.possible[i] = false;
+    }
   }
-  highlevel.setTimeToComplete(req.time);
-  //Check if move is posible
-  highlevel.startMovement();
-  return true;
+  highlevel.setTimeToComplete(req.time); //Log warning
+
+  if(!highlevel.sendCommand())
+  {
+    return_value = false;
+  }
+  return return_value;
 }
 
 bool configArm(driver::config_arm::Request  &req,
                 driver::config_arm::Response &res)
 {
-  for(int i = 0; i != req.angle_offsets.size(); ++i)
+  bool return_value = true;
+  for(int i = 0; i != req.order.size(); ++i)
   {
-    //Set offsets
+    if(highlevel.setOffset(static_cast<Joints>(req.order[i]), req.angle_offsets[i]))
+    {
+      res.possible[i] = true;
+    } 
+    else
+    {
+      return_value = false;
+      res.possible[i] = false;
+    }
   }
-  //Check if offset is posible
   
-  return true;
+  if(!highlevel.sendCommand())
+  {
+    return_value = false;
+  }
+  
+  return return_value;
 }
 
 int main(int argc, char** argv)

@@ -10,7 +10,8 @@ public:
     /// @param joint De enum waarde van het gewricht wat bewogen moet worden
     /// @param degrees De nieuwe hoek voor het gewricht
     /// @param speedInPercent De maximale snelheid van het gewricht in een percentage
-    virtual void setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0) = 0;
+    /// @return of de pwm legatiem is
+    virtual bool setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0) = 0;
 
     /// @brief Stelt de minimale tijd in waarin de beweging wordt afgerond
     /// @param timeInMs De tijd die de volledige beweging nodig heeft om af te ronden 
@@ -18,7 +19,7 @@ public:
 
     /// @brief Verstuurt de wachtrij naar de robot. Alle gewrichten zullen tegelijk bewegen.
     /// @return True als het commando wordt verstuurt, false als er een fout is opgetreden.
-    virtual bool startMovement() = 0;
+    virtual bool sendCommand() = 0;
 
     /// @brief Reset de wachtrij voor de robotarm
     virtual void resetQueue() = 0;
@@ -39,4 +40,9 @@ public:
     /// @param joint De enum waarde van een gewricht
     /// @return De maximale hoek van het gewricht
     virtual uint16_t getMaxAngle(Joints joint) = 0;
+    
+    /// @brief Zet een offset op een gewricht
+    /// @param joint De enum waarde van een gewricht
+    /// @param offset De te zetten offset van het gewricht
+    virtual bool setOffset(Joints joint, int8_t offset) = 0;
 };

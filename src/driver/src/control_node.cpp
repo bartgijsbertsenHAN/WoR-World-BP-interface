@@ -4,6 +4,7 @@
 #include "std_msgs/Empty.h"
 #include "driver/control_arm.h"
 #include "driver/config_arm.h"
+#include "Driver/DriverEnums.hpp"
 
 int main(int argc, char** argv)
 {
@@ -17,29 +18,5 @@ int main(int argc, char** argv)
     driver::config_arm srv_config;
 
     //Add parser (remember values)
-
-    if(client_contol.call(srv_control))
-    {
-        if(srv_control.response.succes)
-        {
-            std::cout << "Move posible" << std::endl;
-        }
-         else 
-        {
-            std::cout << "Move not posible" << std::endl;    
-        }
-    }
-
-    if(client_config.call(srv_config))
-    {
-        if(srv_config.response.succes)
-        {
-            std::cout << "Config valid" << std::endl;
-        }
-         else 
-        {
-            std::cout << "Config invalid" << std::endl;    
-        }
-    }
     return 0;
 }

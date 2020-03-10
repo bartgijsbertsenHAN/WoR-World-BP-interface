@@ -27,9 +27,9 @@ HighLevelDriver::HighLevelDriver(std::string port)
     goalPositions.insert(std::pair<Joints, uint16_t>(WRIST_ROTATE,  0));
 }
 
-void HighLevelDriver::setJointAngle(Joints joint, int16_t degrees, float speedInPercent)
+bool HighLevelDriver::setJointAngle(Joints joint, int16_t degrees, float speedInPercent)
 {
-    lowLevelDriver.setJointPwm(joint, degToPwm(degrees, getNegativeRangeForJoint(joint)), speedInPercent * 655.35);
+    return lowLevelDriver.setJointPwm(joint, degToPwm(degrees, getNegativeRangeForJoint(joint)), speedInPercent * 655.35);
 }
 
 void HighLevelDriver::setTimeToComplete(int timeInMs)
@@ -37,7 +37,7 @@ void HighLevelDriver::setTimeToComplete(int timeInMs)
     lowLevelDriver.setTimeToComplete(timeInMs);
 }
 
-bool HighLevelDriver::startMovement()
+bool HighLevelDriver::sendCommand()
 {
     return lowLevelDriver.sendCommand();
 }
@@ -97,4 +97,9 @@ uint8_t HighLevelDriver::getNegativeRangeForJoint(Joints joint)
         negativeRange = negativeRanges.at(joint);
     }
     return negativeRange;
+}
+
+bool HighLevelDriver::setOffset(Joints joint, int8_t offset)
+{
+    return lowLevelDriver.setPositionOffset(joint, degToPwm(offset, getNegativeRangeForJoint(joint)));
 }
