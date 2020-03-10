@@ -1,16 +1,16 @@
 #include "HighLevelDriver.hpp"
 
 HighLevelDriver::HighLevelDriver(std::string port)
-    :negativeRange(), currentPositions(), goalPositions(), lowLevelDriver(port)
+    :negativeRanges(), currentPositions(), goalPositions(), lowLevelDriver(port)
 {
-    // See the comments in the .hpp about the negativeRange variable
+    // See the comments in the .hpp about the negativeRanges variable
     //  Main point made there is that the values show how much of the range of 180 degrees is below 90 degrees.
-    negativeRange.insert(std::pair<Joints, uint8_t>(BASE,          90));
-    negativeRange.insert(std::pair<Joints, uint8_t>(SHOULDER,      30));
-    negativeRange.insert(std::pair<Joints, uint8_t>(ELBOW,         0));
-    negativeRange.insert(std::pair<Joints, uint8_t>(WRIST_UP_DOWN, 90));
-    negativeRange.insert(std::pair<Joints, uint8_t>(GRIPPER,       0));
-    negativeRange.insert(std::pair<Joints, uint8_t>(WRIST_ROTATE,  90));
+    negativeRanges.insert(std::pair<Joints, uint8_t>(BASE,          90));
+    negativeRanges.insert(std::pair<Joints, uint8_t>(SHOULDER,      30));
+    negativeRanges.insert(std::pair<Joints, uint8_t>(ELBOW,         0));
+    negativeRanges.insert(std::pair<Joints, uint8_t>(WRIST_UP_DOWN, 90));
+    negativeRanges.insert(std::pair<Joints, uint8_t>(GRIPPER,       0));
+    negativeRanges.insert(std::pair<Joints, uint8_t>(WRIST_ROTATE,  90));
 
     /// Initialise the other two vectors with a valid position for every joint.
     currentPositions.insert(std::pair<Joints, uint16_t>(BASE,          0));
@@ -92,9 +92,9 @@ uint8_t HighLevelDriver::getNegativeRangeForJoint(Joints joint)
 {
     uint8_t negativeRange = 0;
     // If the map contains an entry for the given joint, return the set value
-    if (negativeRange.find(joint) != negativeRange.end())
+    if (negativeRanges.find(joint) != negativeRanges.end())
     {
-        negativeRange = negativeRange.at(joint);
+        negativeRange = negativeRanges.at(joint);
     }
     return negativeRange;
 }

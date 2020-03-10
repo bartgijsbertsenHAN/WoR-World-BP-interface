@@ -30,7 +30,7 @@ private:
     /// This variable stores how much of the possible 180 degrees of freedom are within the negative range
     /// I.e. A value of 90 has a range from -90 degrees to 90 degrees
     /// I.e. A value of 30 has a range from -30 degrees to 150 degrees
-    std::map<Joints, uint8_t> negativeRange;
+    std::map<Joints, uint8_t> negativeRanges;
 
     /// This variable stores the positions that the arm is supposed to be in. It is used to calculate the position while moving
     std::map<Joints, uint16_t> currentPositions;
