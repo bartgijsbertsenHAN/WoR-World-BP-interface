@@ -4,8 +4,8 @@ docs
 .vscode
 devel/
 build/
-#install/
-#!install/include
+install/
+!install/include
 
 
 # ========== DEFAULT GITIGNORE ==========
