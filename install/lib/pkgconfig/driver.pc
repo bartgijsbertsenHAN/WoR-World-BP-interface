@@ -1,8 +1,0 @@
-prefix=/home/bart/Documents/Wor/WoR-World-BP-Interface/install
-
-Name: driver
-Description: Description of driver
-Version: 1.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: 
