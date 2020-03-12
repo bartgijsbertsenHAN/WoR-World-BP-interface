@@ -14,46 +14,48 @@ Logger& Logger::getInstance()
 
 Logger::Logger()
 {
-    ros::init(0, [], "talker");
-    log_publisher = n.advertise<std_msgs::String>("driver_log", 5);
+    // ros::init(0, [], "talker");
+    // log_publisher = n.advertise<std_msgs::String>("driver_log", 5);
 }
 
-bool Logger::log(std::string text, LogLevel logLevel, bool copyToStdOut)
+bool Logger::log( std::string text, LogLevel logLevel, bool copyToStdOut)
 {
     std_msgs::String msg;
     msg.data = text;
+    ros::NodeHandle handler;
+    
 
     mtx.lock();
     switch (logLevel)
     {
         case e_DEBUG:
         {
-            ROS_DEBUG_STREAM(text);
+            ROS_DEBUG("%s", text.c_str());
             break;
         }
         case e_INFO:
         {
-            ROS_INFO_STREAM(text);
+            ROS_INFO("%s", text.c_str());
             break;
         }
         case e_WARNING:
         {
-            ROS_WARN_STREAM(text);
+            ROS_WARN("%s", text.c_str());
             break;
         }
         case e_ERROR:
         {
-            ROS_ERROR_STREAM(text);
+            ROS_ERROR("%s", text.c_str());
             break;
         }
         case e_FATAL:
         {
-            ROS_FATAL_STREAM(text);
+            ROS_FATAL("%s", text.c_str());
             break;
         }
         default:
         {
-            ROS_FATAL_STREAM("Invalid log level used when logging to ROSOUT.");
+            ROS_FATAL("Invalid log level used when logging to ROSOUT.");
             throw std::invalid_argument("Invalid argument");
         }
     }

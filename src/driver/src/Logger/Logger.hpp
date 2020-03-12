@@ -4,7 +4,8 @@
 #include <string>
 #include <map>
 #include <mutex>
-#include <ros/console.h>
+#include <ros/ros.h>
+// #include <ros/console.h>
 
 /// @brief The enum describes all possible Loglevels
 enum LogLevel {
@@ -34,10 +35,10 @@ public:
     /// @param text The string that should be sent to ROSOUT
     /// @param logLevel The LogLevel (INFO, DEBUG, WARNING, but ERROR and FATAL are also supported)
     /// @param copyToStdOut When set to true, copies the message to standard output, prefixed with the loglevel
-    ///          (default = true)
+    ///          (default = false)
     /// @return True when the message could be send, false when an recoverable
     ///          error prevented the message from being sent
-    bool log(std::string text, LogLevel logLevel, bool copyToStdOut = true);
+    bool log( std::string text, LogLevel logLevel, bool copyToStdOut = false);
 
 private:
     /// @brief Constructor, currently empty
@@ -45,8 +46,8 @@ private:
 
     static std::mutex mtx;
 
-    ros::NodeHandle n;
-    ros::Publisher log_publisher;
+    ros::NodeHandle handler;
+    // ros::Publisher log_publisher;
 
     /// @brief The logToStdOut function sends a string to the standard output.
     /// @param text The string that should be sent to ROSOUT
