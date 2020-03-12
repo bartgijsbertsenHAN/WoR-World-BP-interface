@@ -2,47 +2,48 @@
 
 #include "DriverEnums.hpp"
 
-/// @brief Interface voor het programma om te communiceren met de robotarm
+/// @brief Interface for translating commands to robotarm instructions and adding usefull functionality
 class IDriver
 {
 public:
-    /// @brief Voegt de nieuwe hoek van het gewricht toe aan de wachtrij voor de robotarm
-    /// @param joint De enum waarde van het gewricht wat bewogen moet worden
-    /// @param degrees De nieuwe hoek voor het gewricht
-    /// @param speedInPercent De maximale snelheid van het gewricht in een percentage
-    /// @return of de pwm legatiem is
+    /// @brief Adds new angle to set joint
+    /// @param joint Joint which needs to be moved
+    /// @param degrees The new angle of the joint 
+    /// @param speedInPercent Maximum speed in percentages
+    /// @return True when degrees are valid
     virtual bool setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0) = 0;
 
-    /// @brief Stelt de minimale tijd in waarin de beweging wordt afgerond
-    /// @param timeInMs De tijd die de volledige beweging nodig heeft om af te ronden 
+    /// @brief Sets time in which the operation needs to be completed
+    /// @param timeInMs Time of action in milliseconds
     virtual void setTimeToComplete(int timeInMs) = 0;
 
-    /// @brief Verstuurt de wachtrij naar de robot. Alle gewrichten zullen tegelijk bewegen.
-    /// @return True als het commando wordt verstuurt, false als er een fout is opgetreden.
+    /// @brief Sends command to robotarm
+    /// @return True when command is succesfully send
     virtual bool sendCommand() = 0;
 
-    /// @brief Reset de wachtrij voor de robotarm
+    /// @brief Resets queue of command
     virtual void resetQueue() = 0;
 
-    /// @brief Geeft de voortgang van de beweging in percentages
-    /// @return Een percentage wat de voortgang van de beweging representeert (0 - 100)
+    /// @brief Gives the progress of the robotarm in percentages
+    /// @return The progress in percentages (0 - 100)
     virtual float getProgressInPercent() = 0;
 
-    /// @brief Noodstop. Stopt de beweging van de robotarm onmiddelijk.
+    /// @brief emergency stop. Stops movement right away
     virtual void emergencyStop() = 0;
 
-    /// @brief Vraagt de laagst toegestane hoek van een gegeven gewricht op
-    /// @param joint De enum waarde van een gewricht
-    /// @return De minimale hoek van het gewricht
+    /// @brief Getter for the minimum angle of set joint
+    /// @param joint The joint of which angle is requested
+    /// @return Minimum angle for set joint
     virtual uint16_t getMinAngle(Joints joint) = 0;
 
-    /// @brief Vraagt de hoogst toegestane hoek van een gegeven gewricht op
-    /// @param joint De enum waarde van een gewricht
-    /// @return De maximale hoek van het gewricht
+    /// @brief Getter for the maximum angle of set joint
+    /// @param joint The joint of which angle is requested
+    /// @return Maximum value for set joint
     virtual uint16_t getMaxAngle(Joints joint) = 0;
     
-    /// @brief Zet een offset op een gewricht
-    /// @param joint De enum waarde van een gewricht
-    /// @param offset De te zetten offset van het gewricht
+    /// @brief Adds a offset for set joint to queue, offsets are lost after power down
+    /// @param joint Joint which needs calibrating
+    /// @param offset Offset of joint in pwm
+    /// @return True when offset is valid
     virtual bool setOffset(Joints joint, int8_t offset) = 0;
 };

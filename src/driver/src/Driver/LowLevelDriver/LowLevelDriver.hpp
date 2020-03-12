@@ -6,68 +6,68 @@
 #include <boost/asio.hpp>
 #include "../DriverEnums.hpp"
 
-/// @brief Deze klasse beheert direct de communicatie met de robotarm, zonder functionaliteit toe te voegen
+/// @brief LowLevelDriver translates robotarm functionality and protects the hardware from damage without adding functionality
 class LowLevelDriver
 {
 public:
     LowLevelDriver() = delete;
 
-    /// @brief De constructor initialiseert de klassevariabelen
+    /// @brief Contructor sets port and fills all protection values
     /// @param port The port to send the commands to
     LowLevelDriver(std::string port);
 
-    /// @brief Deze functie voegt de gewenste hoek van het meegegeven gewricht toe aan de wachtrij voor de robotarm
-    /// @param joint De enum waarde van het gewricht waar het commando naar toe wordt gestuurd
-    /// @param pwm De PWM waarde die naar de servo wordt geschreven aan het einde van de beweging
-    /// @param speed De maximale snelheid van de servo gedurende de beweging
-    /// @return of de pwm legatiem is
+    /// @brief Adds wanted joint adjustment to message
+    /// @param joint Set joint which needs to be adjusted
+    /// @param pwm Target angle in pwm
+    /// @param speed Maximum speed of the joint
+    /// @return if pwm is valid
     bool setJointPwm(Joints joint, uint16_t pwm, uint16_t speed = 65535);
 
-    /// @brief De functie stelt de tijd in waarin de arm de beweging uitvoert.
-    /// Roep deze functie aan als laatste functie voor sendCommand wordt aangeroepen.
-    /// @param timeInMs De tijd in milliseconden waarin de beweging minimaal moet worden uitgevoerd
+    /// @brief Sets time in which movements needs to be completed, it doesn't mean it will always achieve this.
+    /// Call this function last before sending.
+    /// @param timeInMs Time in millieseconds in which the movement needs to be completed.
     void setTimeToComplete(uint16_t timeInMs);
 
-    /// @brief Schrijft een offset van de servo naar het geheugen van de robotarm. Deze wordt gereset bij opnieuw opstarten.
-    /// @param joint De enum waarde van het gewricht wat wordt gekalibreerd
-    /// @param offset De offset voor het gewricht als PWM waarde
-    /// @return True als het bericht kan worden verzonden, false als het niet kan worden verzonden
+    /// @brief Adds a offset for set joint to queue, offsets are lost after power down
+    /// @param joint Joint which needs calibrating
+    /// @param offset Offset of joint in pwm
+    /// @return True when offset is valid
     bool setPositionOffset(Joints joint, int8_t offset);
 
-    /// @brief Verstuurt het commando wat in de wachtrij staat, reset de wachtrij
-    /// @return True als het bericht kan worden verzonden, false als het niet kan worden verzonden
+    /// @brief Sends command to robotarm and resets queue
+    /// @return True when command is send, false if it fails
     bool sendCommand();
 
-    /// @brief Reset de wachtrij naar een lege string
+    /// @brief Reset command queue to empty string
     void resetCommand();
 
-    /// @brief Stopt onmiddelijk alle beweging van de robotarm
+    /// @brief Stops movement of the robotarm
     void emergencyStop();
 
-    /// @brief Vraagt de laagst toegestane hoek van een gegeven gewricht op
-    /// @param joint Het gewricht als een enum waarde
-    /// @return Geeft de laagst toegestane hoek terug
+    /// @brief Getter for the minimum pwm of set joint
+    /// @param joint The joint of which pwm is requested
+    /// @return Minimum value for set joint
     uint16_t getMinPwm(Joints joint);
 
-    /// @brief Vraagt de hoogst toegestane hoek van een gegeven gewricht op
-    /// @param joint Het gewricht als een enum waarde
-    /// @return Geeft de hoogst toegestane hoek terug
+    /// @brief Getter for the maximum pwm of set joint
+    /// @param joint The joint of which pwm is requested
+    /// @return Maximum value for set joint
     uint16_t getMaxPwm(Joints joint);
 
 private:
-    /// @brief Slaat een lijst op met alle laagst toegestane waarden
+    /// @brief Contains a list of minimum pwm values
     std::map<Joints, uint16_t> minPwm;
 
-    /// @brief Slaat een lijst op met alle hoogst toegestane waarden
+    /// @brief Contains a list of maximum pwm values
     std::map<Joints, uint16_t> maxPwm;
 
-    /// @brief Slaat het bericht op terwijl het wordt opgebouwd, tot het wordt verzonden. (De wachtrij)
+    /// @brief Saves the message while its being constructed (Queue)
     std::string message;
 
-    /// @brief Slaat de port op als een string
+    /// @brief Saves port as string
     std::string port;
 
-    /// @brief Absolute maximale offset op een gewricht
+    /// @brief Absolute max offset
     uint8_t absMaxOffset;
 
 };
