@@ -37,6 +37,7 @@ bool controlArm(driver::control_arm::Request  &req,
   {
     return_value = false;
   }
+  
   return return_value;
 }
 
@@ -81,7 +82,12 @@ int main(int argc, char** argv)
     ros::ServiceServer config_arm = n.advertiseService("config_arm", configArm);
     
     highlevel = HighLevelDriver(argv[1]);
-    ros::spin();
+
+    while(highlevel.getCurrentState() != HighLevelDriver::MachineStates::s_End)
+    {
+      highlevel.runStateMachine();
+      ros::spinOnce();
+    }
 
     return 0;
 

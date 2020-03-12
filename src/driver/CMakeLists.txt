@@ -136,7 +136,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 file(GLOB_RECURSE source_list_driver "DriverEnums.hpp" "HighLevelDriver.hpp" "HighLevelDriver.cpp" 
- "IDriver" "driver_node.cpp")
+ "IDriver" "driver_node.cpp" "Logger.cpp")
 add_executable(driver_node ${source_list_driver})
 add_executable(control_node src/control_node.cpp src/Driver/DriverEnums.hpp)
 

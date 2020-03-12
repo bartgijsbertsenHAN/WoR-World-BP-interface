@@ -69,4 +69,5 @@ private:
 
     /// @brief Absolute maximale offset op een gewricht
     uint8_t absMaxOffset;
+
 };

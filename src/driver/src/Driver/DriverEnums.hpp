@@ -31,3 +31,5 @@ enum Joints {
     GRIPPER         = 4,
     WRIST_ROTATE    = 5
 };
+
+const int NUMBER_OF_JOINTS = 5;
