@@ -11,6 +11,7 @@
 ros::ServiceClient client_contol;
 ros::ServiceClient client_config;
 ros::Publisher stop_control;
+ros::Publisher end_control;
 driver::control_arm srv_control;
 driver::config_arm srv_config;
 
@@ -24,6 +25,7 @@ int main(int argc, char** argv)
     client_contol = n.serviceClient<driver::control_arm>("control_arm");
     client_config = n.serviceClient<driver::config_arm>("config_arm");
     stop_control = n.advertise<std_msgs::Empty>("emergencyStop", 1);
+    end_control = n.advertise<std_msgs::Empty>("endProgram", 1);
 
     while (true)
     {

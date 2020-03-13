@@ -13,6 +13,12 @@ HighLevelDriver highlevel = HighLevelDriver(" ");
 void emergencyStopCall(const std_msgs::Empty::ConstPtr& msg)
 {
   highlevel.emergencyStop();
+  highlevel.setCurrentState(HighLevelDriver::MachineStates::s_EmergencyStop);
+}
+
+void endProgramCall(const std_msgs::Empty::ConstPtr& msg)
+{
+  highlevel.setCurrentState(HighLevelDriver::MachineStates::s_End);
 }
 
 bool controlArm(driver::control_arm::Request  &req,
@@ -37,6 +43,7 @@ bool controlArm(driver::control_arm::Request  &req,
   {
     return_value = false;
   }
+  
   return return_value;
 }
 
@@ -57,10 +64,10 @@ bool configArm(driver::config_arm::Request  &req,
     }
   }
   
-  if(!highlevel.sendCommand())
-  {
-    return_value = false;
-  }
+  // if(!highlevel.sendCommand())
+  // {
+  //   return_value = false;
+  // }
   
   return return_value;
 }
@@ -77,11 +84,17 @@ int main(int argc, char** argv)
 
     ros::NodeHandle n;
     ros::Subscriber emergencyStop = n.subscribe("emergencyStop", 1, emergencyStopCall);
+    ros::Subscriber endProgram = n.subscribe("endProgram", 1, endProgramCall);
     ros::ServiceServer control_arm = n.advertiseService("control_arm", controlArm);
     ros::ServiceServer config_arm = n.advertiseService("config_arm", configArm);
     
     highlevel = HighLevelDriver(argv[1]);
-    ros::spin();
+
+    while(highlevel.getCurrentState() != HighLevelDriver::MachineStates::s_End)
+    {
+      highlevel.runStateMachine();
+      ros::spinOnce();
+    }
 
     return 0;
 

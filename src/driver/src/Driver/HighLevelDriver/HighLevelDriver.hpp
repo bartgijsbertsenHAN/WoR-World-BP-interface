@@ -2,6 +2,7 @@
 
 #include <map>
 #include <cstdint>
+#include <chrono>
 #include "../IDriver.hpp"
 #include "../LowLevelDriver/LowLevelDriver.hpp"
 
@@ -9,6 +10,13 @@
 class HighLevelDriver : IDriver
 {
 public:
+    enum MachineStates{
+        s_Configure = 0,
+        s_Idle = 1,
+        s_Move = 2,
+        s_End = 3,
+        s_EmergencyStop = 4
+    };
     HighLevelDriver(std::string port);
 
     bool setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0);
@@ -20,9 +28,18 @@ public:
     uint16_t getMinAngle(Joints joint);
     uint16_t getMaxAngle(Joints joint);
     bool setOffset(Joints joint, int8_t offset);
+    /// @brief sets new state for highlevel driver
+    /// @param state new state to set 
+    void setCurrentState(MachineStates newState);
+    /// @brief returns current state of highlevel driver
+    MachineStates getCurrentState();
+    /// @brief runs the state machine of highlevel driver
+    void runStateMachine();
 
 private:
     int16_t pwmToDeg(uint16_t pwm, int8_t negativeRange);
+    /// @brief moves arm to init position with half speed
+    void moveToInitPos();
 public:
     uint16_t degToPwm(int16_t deg, int8_t negativeRange);
 
@@ -41,4 +58,16 @@ private:
 
     /// A reference to the low level driver that sends the commands to the robot arm
     LowLevelDriver lowLevelDriver;
+
+    /// The current state of highleveldriver
+    MachineStates currentState;
+
+    /// Initial position of arm
+    uint8_t initPositions[NUMBER_OF_JOINTS];
+
+    // Joint offsets
+    uint8_t jointOffsets[NUMBER_OF_JOINTS];
+
+    /// Estimated time when done
+    std::chrono::milliseconds timeDone;
 };

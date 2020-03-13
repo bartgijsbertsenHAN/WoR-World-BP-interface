@@ -122,9 +122,10 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/driver.cpp
-# )
+ add_library(LowLevelDriverLib
+   src/Driver/LowLevelDriver/LowLevelDriver.cpp
+   src/Driver/DriverEnums.hpp
+ )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -135,8 +136,8 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 file(GLOB_RECURSE source_list_driver "DriverEnums.hpp" "HighLevelDriver.hpp" "HighLevelDriver.cpp" 
-"LowLevelDriver.hpp" "LowLevelDriver.cpp" "IDriver" "driver_node.cpp")
-file(GLOB_RECURSE source_list_control "control_node.cpp" "Parser.hpp" "Parser.cpp")
+ "IDriver" "driver_node.cpp" "Logger.cpp")
+file(GLOB_RECURSE source_list_control "control_node.cpp" "Parser.hpp" "Parser.cpp" "DriverEnums.hpp")
 add_executable(driver_node ${source_list_driver})
 add_executable(control_node ${source_list_control})
 
@@ -151,8 +152,8 @@ add_executable(control_node ${source_list_control})
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(${PROJECT_NAME}_node
-   ${catkin_LIBRARIES} pthread ${Boost_LIBRARIES}
+ target_link_libraries(driver_node
+   ${catkin_LIBRARIES} pthread ${Boost_LIBRARIES} LowLevelDriverLib
  )
 target_link_libraries(control_node
    ${catkin_LIBRARIES}
