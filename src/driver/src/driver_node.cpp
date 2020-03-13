@@ -13,12 +13,12 @@ HighLevelDriver highlevel = HighLevelDriver(" ");
 void emergencyStopCall(const std_msgs::Empty::ConstPtr& msg)
 {
   highlevel.emergencyStop();
-  highlevel.setCurrentState(HighLevelDriver::MachineStates::s_EmergencyStop);
+  highlevel.setCurrentState(MachineStates::s_EmergencyStop);
 }
 
 void endProgramCall(const std_msgs::Empty::ConstPtr& msg)
 {
-  highlevel.setCurrentState(HighLevelDriver::MachineStates::s_End);
+  highlevel.setCurrentState(MachineStates::s_End);
 }
 
 bool controlArm(driver::control_arm::Request  &req,
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
     
     highlevel = HighLevelDriver(argv[1]);
 
-    while(highlevel.getCurrentState() != HighLevelDriver::MachineStates::s_End)
+    while(highlevel.getCurrentState() != MachineStates::s_End)
     {
       highlevel.runStateMachine();
       ros::spinOnce();

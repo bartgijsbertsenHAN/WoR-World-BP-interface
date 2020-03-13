@@ -10,18 +10,12 @@
 class HighLevelDriver : IDriver
 {
 public:
-    enum MachineStates{
-        s_Configure = 0,
-        s_Idle = 1,
-        s_Move = 2,
-        s_End = 3,
-        s_EmergencyStop = 4
-    };
+    
     HighLevelDriver(std::string port);
 
     bool setJointAngle(Joints joint, int16_t degrees, float speedInPercent = 100.0);
     void setTimeToComplete(int timeInMs);
-    bool sendCommand();
+    bool sendCommand(bool isSendingMove = true);
     void resetQueue();
     float getProgressInPercent();
     void emergencyStop();

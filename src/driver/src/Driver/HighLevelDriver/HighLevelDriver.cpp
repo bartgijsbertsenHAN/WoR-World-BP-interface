@@ -45,13 +45,16 @@ void HighLevelDriver::setTimeToComplete(int timeInMs)
     lowLevelDriver.setTimeToComplete(timeInMs);
 }
 
-bool HighLevelDriver::sendCommand()
+bool HighLevelDriver::sendCommand(bool isSendingMove)
 {
     if(lowLevelDriver.sendCommand())
     {
-        Logger::getInstance().log("STATE: {Move}",e_INFO);
-        Logger::getInstance().log("EVENT: {Valide commando ontvangen}",e_DEBUG);
-        currentState = MachineStates::s_Move;
+        if(isSendingMove)
+        {
+            Logger::getInstance().log("EVENT: {Valide commando ontvangen}",e_DEBUG);
+            Logger::getInstance().log("STATE: {Move}",e_INFO);
+            currentState = MachineStates::s_Move;
+        }
         return true;
     }
     else
@@ -143,7 +146,7 @@ void HighLevelDriver::setCurrentState(MachineStates newState)
     currentState = newState;
 }
 
-HighLevelDriver::MachineStates HighLevelDriver::getCurrentState()
+MachineStates HighLevelDriver::getCurrentState()
 {
     return currentState;
 }
@@ -154,12 +157,14 @@ void HighLevelDriver::runStateMachine()
     {
     case MachineStates::s_Configure:
     {
-        moveToInitPos();
-        sendCommand();
-        currentState = MachineStates::s_Idle;
         Logger::getInstance().log("EVENT: {Nieuwe configuratie}",e_DEBUG);
+        moveToInitPos();
+        sendCommand(false);
         Logger::getInstance().log("STATE: {DefaultPosition}",e_INFO);
+        currentState = MachineStates::s_Idle;
         Logger::getInstance().log("EVENT: {Arm in start positie}",e_DEBUG);
+        Logger::getInstance().log("STATE: {Idle}",e_INFO);
+
         break;
     }
     case MachineStates::s_Idle:
@@ -171,25 +176,25 @@ void HighLevelDriver::runStateMachine()
         if(timeDone <= std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()))
         {
             currentState = MachineStates::s_Idle;
-            Logger::getInstance().log("STATE: {Idle}",e_INFO);
             Logger::getInstance().log("EVENT: {Arm in positie}",e_DEBUG);
+            Logger::getInstance().log("STATE: {Idle}",e_INFO);
         }
         break;
     }
     case MachineStates::s_End:
     {
         moveToInitPos();
-        sendCommand();
-        Logger::getInstance().log("STATE: {DefaultPosition}",e_INFO);
+        sendCommand(false);
         Logger::getInstance().log("EVENT: {EndProgram ontvangen}",e_DEBUG);
+        Logger::getInstance().log("STATE: {DefaultPosition}",e_INFO);
 
         break;
     }
     case MachineStates::s_EmergencyStop:
     {
         lowLevelDriver.emergencyStop();
-        Logger::getInstance().log("STATE: {EmergencyStop}",e_INFO);
         Logger::getInstance().log("EVENT: {EmergencyStop ontvangen}",e_DEBUG);
+        Logger::getInstance().log("STATE: {EmergencyStop}",e_INFO);
         while(true);
         break;
     }

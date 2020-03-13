@@ -19,7 +19,7 @@ public:
 
     /// @brief Sends command to robotarm
     /// @return True when command is succesfully send
-    virtual bool sendCommand() = 0;
+    virtual bool sendCommand(bool isSendingMove) = 0;
 
     /// @brief Resets queue of command
     virtual void resetQueue() = 0;
