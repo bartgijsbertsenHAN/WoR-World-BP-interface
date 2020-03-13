@@ -136,8 +136,9 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 file(GLOB_RECURSE source_list_driver "DriverEnums.hpp" "HighLevelDriver.hpp" "HighLevelDriver.cpp" 
 "LowLevelDriver.hpp" "LowLevelDriver.cpp" "IDriver" "driver_node.cpp")
+file(GLOB_RECURSE source_list_control "control_node.cpp" "Parser.hpp" "Parser.cpp")
 add_executable(driver_node ${source_list_driver})
-add_executable(control_node src/control_node.cpp)
+add_executable(control_node ${source_list_control})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

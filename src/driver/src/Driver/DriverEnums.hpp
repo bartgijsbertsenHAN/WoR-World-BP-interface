@@ -24,6 +24,7 @@ enum RobotArmStates {
 
 /// Enum wat de gewrichten een naam geeft
 enum Joints {
+    UNKNOWN         = -1,
     BASE            = 0,
     SHOULDER        = 1,
     ELBOW           = 2,
