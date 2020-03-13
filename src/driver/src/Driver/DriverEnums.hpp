@@ -2,6 +2,7 @@
 
 /// Enum which gives joints names
 enum Joints {
+    UNKNOWN         = -1,
     BASE            = 0,
     SHOULDER        = 1,
     ELBOW           = 2,
