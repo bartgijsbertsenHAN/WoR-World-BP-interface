@@ -106,7 +106,6 @@ bool LowLevelDriver::sendCommand()
         serial.close();
     }
 
-    std::cout << "[INFO] Sending command to port: " << message << std::endl;
 
     resetCommand();
 }

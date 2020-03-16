@@ -87,9 +87,9 @@ int main(int argc, char** argv)
     ros::Subscriber endProgram = n.subscribe("endProgram", 1, endProgramCall);
     ros::ServiceServer control_arm = n.advertiseService("control_arm", controlArm);
     ros::ServiceServer config_arm = n.advertiseService("config_arm", configArm);
-    
-    highlevel = HighLevelDriver(argv[1]);
 
+    highlevel = HighLevelDriver(argv[1]);
+    
     while(highlevel.getCurrentState() != MachineStates::s_End)
     {
       highlevel.runStateMachine();

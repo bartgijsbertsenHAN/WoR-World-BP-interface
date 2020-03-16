@@ -49,6 +49,7 @@ bool HighLevelDriver::sendCommand(bool isSendingMove)
 {
     if(lowLevelDriver.sendCommand())
     {
+        std::cout << "in send" << std::endl;
         if(isSendingMove)
         {
             Logger::getInstance().log("EVENT: {Valide commando ontvangen}",e_DEBUG);
@@ -153,6 +154,7 @@ MachineStates HighLevelDriver::getCurrentState()
 
 void HighLevelDriver::runStateMachine()
 {
+    // std::cout << "Current state " << std::to_string(currentState) << std::endl;
     switch (currentState)
     {
     case MachineStates::s_Configure:
@@ -201,6 +203,7 @@ void HighLevelDriver::runStateMachine()
     default:
         break;
     }
+
 }
 
 void HighLevelDriver::moveToInitPos()

@@ -65,7 +65,6 @@ void sendMoveCmd()
         iter++;
     }
     srv_control.request.time = parser.timeToComplete;
-
     if (client_contol.call(srv_control))
     {
         std::cout << "Successfully sent command" << std::endl;
