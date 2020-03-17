@@ -53,6 +53,11 @@ void sendMoveCmd()
 {
     std::cout << "Starting send method (move)" << std::endl;
     int iter = 0;
+
+    srv_control.request.order.resize(parser.newAngles.size());
+    srv_control.request.angles.resize(parser.newAngles.size());
+    srv_control.request.speeds.resize(parser.newSpeeds.size());
+
     for (auto pair : parser.newAngles)
     {
         int8_t speed = INT8_MAX;
@@ -79,13 +84,14 @@ void sendConfigCmd()
 {
     std::cout << "Starting send method (config)" << std::endl;
     int iter = 0;
+
+    srv_config.request.order.resize(parser.newAngles.size());
+    srv_config.request.angle_offsets.resize(parser.newAngles.size());
+    
     for (auto pair : parser.newAngles)
     {
-        // srv_config.request.order[iter] = pair.first;
-        // srv_config.request.angle_offsets[iter] = pair.second;
-
-        srv_config.request.order[iter] = 1;
-        srv_config.request.angle_offsets[iter] = 2;
+        srv_config.request.order[iter] = pair.first;
+        srv_config.request.angle_offsets[iter] = pair.second;
         iter++;
     }
     if (client_contol.call(srv_config))
