@@ -8,12 +8,8 @@
 #include "Parser/Parser.hpp"
 #include "control_node.hpp"
 
-ros::ServiceClient client_contol;
-ros::ServiceClient client_config;
 ros::Publisher stop_control;
 ros::Publisher end_control;
-driver::control_arm srv_control;
-driver::config_arm srv_config;
 
 Parser parser;
 
@@ -22,8 +18,6 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "control_arm");
 
     ros::NodeHandle n;
-    client_contol = n.serviceClient<driver::control_arm>("control_arm");
-    client_config = n.serviceClient<driver::config_arm>("config_arm");
     stop_control = n.advertise<std_msgs::Empty>("emergencyStop", 1);
     end_control = n.advertise<std_msgs::Empty>("endProgram", 1);
 
@@ -51,6 +45,12 @@ void sendEmergencyStopCmd()
 
 void sendMoveCmd()
 {
+    // ROS setup
+    ros::NodeHandle n;
+    ros::ServiceClient client_contol;
+    driver::control_arm srv_control;
+    client_contol = n.serviceClient<driver::control_arm>("control_arm");
+
     std::cout << "Starting send method (move)" << std::endl;
     int iter = 0;
 
@@ -80,8 +80,15 @@ void sendMoveCmd()
     std::cout << "Exiting send method" << std::endl;
 }
 
+
 void sendConfigCmd()
 {
+    // ROS setup
+    ros::NodeHandle n;
+    ros::ServiceClient client_config;
+    driver::config_arm srv_config;
+    client_config = n.serviceClient<driver::config_arm>("config_arm");
+
     std::cout << "Starting send method (config)" << std::endl;
     int iter = 0;
 
@@ -94,7 +101,7 @@ void sendConfigCmd()
         srv_config.request.angle_offsets[iter] = pair.second;
         iter++;
     }
-    if (client_contol.call(srv_config))
+    if (client_config.call(srv_config))
     {
         std::cout << "Successfully sent command" << std::endl;
     }
