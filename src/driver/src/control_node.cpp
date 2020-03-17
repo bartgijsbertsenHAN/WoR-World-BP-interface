@@ -2,8 +2,8 @@
 #include <thread>
 #include "ros/ros.h"
 #include "std_msgs/Empty.h"
-#include "driver/control_arm.h"
-#include "driver/config_arm.h"
+#include "Driver/control_arm.h"
+#include "Driver/config_arm.h"
 #include "Driver/DriverEnums.hpp"
 #include "Parser/Parser.hpp"
 #include "control_node.hpp"
@@ -32,7 +32,9 @@ int main(int argc, char** argv)
         std::string inputString;
         std::getline(std::cin, inputString);
 
-        parser.parseLine(inputString);
+        std::cout << "Starting parser" << std::endl;
+        bool result = parser.parseLine(inputString);
+        std::cout << "Parser finished (" << result << ")" << std::endl;
     }
 
     return 0;
@@ -49,6 +51,7 @@ void sendEmergencyStopCmd()
 
 void sendMoveCmd()
 {
+    std::cout << "Starting send method (move)" << std::endl;
     int iter = 0;
     for (auto pair : parser.newAngles)
     {
@@ -69,10 +72,12 @@ void sendMoveCmd()
     {
         std::cout << "Successfully sent command" << std::endl;
     }
+    std::cout << "Exiting send method" << std::endl;
 }
 
 void sendConfigCmd()
 {
+    std::cout << "Starting send method (config)" << std::endl;
     int iter = 0;
     for (auto pair : parser.newAngles)
     {
@@ -84,4 +89,5 @@ void sendConfigCmd()
     {
         std::cout << "Successfully sent command" << std::endl;
     }
+    std::cout << "Exiting send method" << std::endl;
 }
