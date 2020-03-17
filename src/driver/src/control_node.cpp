@@ -26,9 +26,7 @@ int main(int argc, char** argv)
         std::string inputString;
         std::getline(std::cin, inputString);
 
-        std::cout << "Starting parser" << std::endl;
         bool result = parser.parseLine(inputString);
-        std::cout << "Parser finished (" << result << ")" << std::endl;
     }
 
     return 0;
@@ -51,7 +49,6 @@ void sendMoveCmd()
     driver::control_arm srv_control;
     client_contol = n.serviceClient<driver::control_arm>("control_arm");
 
-    std::cout << "Starting send method (move)" << std::endl;
     int iter = 0;
 
     srv_control.request.order.resize(parser.newAngles.size());
@@ -77,7 +74,6 @@ void sendMoveCmd()
     {
         std::cout << "Successfully sent command" << std::endl;
     }
-    std::cout << "Exiting send method" << std::endl;
 }
 
 
@@ -89,7 +85,6 @@ void sendConfigCmd()
     driver::config_arm srv_config;
     client_config = n.serviceClient<driver::config_arm>("config_arm");
 
-    std::cout << "Starting send method (config)" << std::endl;
     int iter = 0;
 
     srv_config.request.order.resize(parser.newAngles.size());
@@ -105,5 +100,4 @@ void sendConfigCmd()
     {
         std::cout << "Successfully sent command" << std::endl;
     }
-    std::cout << "Exiting send method" << std::endl;
 }
