@@ -8,8 +8,12 @@
 #include "Parser/Parser.hpp"
 #include "control_node.hpp"
 
+ros::ServiceClient client_contol;
+ros::ServiceClient client_config;
 ros::Publisher stop_control;
 ros::Publisher end_control;
+driver::control_arm srv_control;
+driver::config_arm srv_config;
 
 Parser parser;
 
@@ -20,6 +24,8 @@ int main(int argc, char** argv)
     ros::NodeHandle n;
     stop_control = n.advertise<std_msgs::Empty>("emergencyStop", 1);
     end_control = n.advertise<std_msgs::Empty>("endProgram", 1);
+    client_contol = n.serviceClient<driver::control_arm>("control_arm");
+    client_config = n.serviceClient<driver::config_arm>("config_arm");
 
     while (true)
     {
@@ -27,6 +33,11 @@ int main(int argc, char** argv)
         std::getline(std::cin, inputString);
 
         bool result = parser.parseLine(inputString);
+        if (!result)
+        {
+            std::cout << "Parser could not form a message to send to the driver\n" <<
+                         " Please check your input" << std::endl;
+        }
     }
 
     return 0;
@@ -43,12 +54,6 @@ void sendEmergencyStopCmd()
 
 void sendMoveCmd()
 {
-    // ROS setup
-    ros::NodeHandle n;
-    ros::ServiceClient client_contol;
-    driver::control_arm srv_control;
-    client_contol = n.serviceClient<driver::control_arm>("control_arm");
-
     int iter = 0;
 
     srv_control.request.order.resize(parser.newAngles.size());
@@ -79,12 +84,6 @@ void sendMoveCmd()
 
 void sendConfigCmd()
 {
-    // ROS setup
-    ros::NodeHandle n;
-    ros::ServiceClient client_config;
-    driver::config_arm srv_config;
-    client_config = n.serviceClient<driver::config_arm>("config_arm");
-
     int iter = 0;
 
     srv_config.request.order.resize(parser.newAngles.size());
