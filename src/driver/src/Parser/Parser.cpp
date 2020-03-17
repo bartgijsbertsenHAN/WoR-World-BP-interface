@@ -1,7 +1,7 @@
 #include "Parser.hpp"
 #include <algorithm>
 
-#define DEBUG
+//#define DEBUG
 
 Parser::Parser()
 {
@@ -83,7 +83,8 @@ bool Parser::parseLine(std::string input)
     #endif
 
     // Check if the current command is an CONFIG command
-    if (workingTokens.at(0) == "CONF" || workingTokens.at(0) == "CONFIG")
+    if (stringToUpper(workingTokens.at(0)) == "CONF" ||
+        stringToUpper(workingTokens.at(0)) == "CONFIG")
     {
         #ifdef DEBUG
         std::cout << "Parsing as configuration" << std::endl;
@@ -250,6 +251,10 @@ bool Parser::parseConfig()
 
     for (auto token : workingTokens)
     {
+        #ifdef DEBUG
+        std::cout << "Token \"" << token << "\"" << std::endl;
+        #endif
+
         // Reset variables
         jointAsString = "";
         offsetAsString = "";
@@ -272,9 +277,22 @@ bool Parser::parseConfig()
             {
                 offsetAsString += character;
             }
+
+            #ifdef DEBUG
+            std::cout << "  Joint: " << jointAsString << "\tOffset: " << offsetAsString << std::endl;
+            #endif
         }
 
         selectedJoint = stringToJoint(jointAsString);
+        if (selectedJoint == UNKNOWN)
+        {
+            #ifdef DEBUG
+            std::cout << "Joint not found in token, skipping token" << std::endl;
+            #endif
+
+            continue;
+        }
+
         try
         {
             offset = std::stoi(offsetAsString);
@@ -291,11 +309,13 @@ bool Parser::parseConfig()
             return false;
         }
 
+        std::cout << "Ik denk ... " << std::endl;
         auto iter = newAngles.find(selectedJoint);
         if (iter != newAngles.end())
         {
             iter->second = offset;
         }
+        std::cout << "Hier!" << std::endl;
     }
 
     return true;
