@@ -25,6 +25,7 @@ bool controlArm(driver::control_arm::Request  &req,
                 driver::control_arm::Response &res)
 {
   bool return_value = true;
+  res.possible.resize(req.order.size());
   for(int i = 0; i != req.order.size(); ++i)
   {
     if(highlevel.setJointAngle(static_cast<Joints>(req.order[i]), req.angles[i], req.speeds[i]))
@@ -43,7 +44,7 @@ bool controlArm(driver::control_arm::Request  &req,
   {
     return_value = false;
   }
-  
+
   return return_value;
 }
 
@@ -51,6 +52,7 @@ bool configArm(driver::config_arm::Request  &req,
                 driver::config_arm::Response &res)
 {
   bool return_value = true;
+  res.possible.resize(req.order.size());
   for(int i = 0; i != req.order.size(); ++i)
   {
     if(highlevel.setOffset(static_cast<Joints>(req.order[i]), req.angle_offsets[i]))
