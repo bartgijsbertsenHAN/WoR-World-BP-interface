@@ -2,8 +2,8 @@
 #include <thread>
 #include "ros/ros.h"
 #include "std_msgs/Empty.h"
-#include "Driver/control_arm.h"
-#include "Driver/config_arm.h"
+#include "driver/control_arm.h"
+#include "driver/config_arm.h"
 #include "Driver/DriverEnums.hpp"
 #include "Parser/Parser.hpp"
 #include "control_node.hpp"
@@ -81,8 +81,11 @@ void sendConfigCmd()
     int iter = 0;
     for (auto pair : parser.newAngles)
     {
-        srv_config.request.order[iter] = pair.first;
-        srv_config.request.angle_offsets[iter] = pair.second;
+        // srv_config.request.order[iter] = pair.first;
+        // srv_config.request.angle_offsets[iter] = pair.second;
+
+        srv_config.request.order[iter] = 1;
+        srv_config.request.angle_offsets[iter] = 2;
         iter++;
     }
     if (client_contol.call(srv_config))
