@@ -1,6 +1,8 @@
 #include "Parser.hpp"
 #include <algorithm>
 
+#define DEBUG
+
 Parser::Parser()
 {
     positionStrings.insert(std::pair<std::string, std::string>(
@@ -38,6 +40,10 @@ bool Parser::parseLine(std::string input)
     // Reset the parser until we can continue the parsing
     do
     {
+        #ifdef DEBUG
+        std::cout << "Starting parser, input = " << input << std::endl;
+        #endif
+
         // Clear the temporary characters, like the working tokens vector
         resetParser();
 
@@ -57,18 +63,38 @@ bool Parser::parseLine(std::string input)
         return false;
     }
 
+    #ifdef DEBUG
+    std::cout << "Checking for emergency stop command..." << std::endl;
+    #endif
+
     // Check for an emergency stop command
     if (parseEmergencyStop())
     {
+        #ifdef DEBUG
+        std::cout << "Received emergency stop command" << std::endl;
+        #endif
+
         sendEmergencyStopCmd();
         return true;
     }
 
+    #ifdef DEBUG
+    std::cout << "Deciding on configuration or move command..." << std::endl;
+    #endif
+
     // Check if the current command is an CONFIG command
     if (workingTokens.at(0) == "CONF" || workingTokens.at(0) == "CONFIG")
     {
+        #ifdef DEBUG
+        std::cout << "Parsing as configuration" << std::endl;
+        #endif
+
         if (parseConfig())
         {
+            #ifdef DEBUG
+            std::cout << "Input is valid configuration" << std::endl;
+            #endif
+
             sendConfigCmd();
             return true;
         }
@@ -76,8 +102,16 @@ bool Parser::parseLine(std::string input)
     }
     else
     {
+        #ifdef DEBUG
+        std::cout << "Parsing as move command" << std::endl;
+        #endif
+
         if (parseMove())
         {
+            #ifdef DEBUG
+            std::cout << "Move command valid" << std::endl;
+            #endif
+
             sendMoveCmd();
             return true;
         }
@@ -146,6 +180,22 @@ void Parser::splitStringInTokens(std::string input)
     {
         workingTokens.push_back(workingString);
     }
+
+    #ifdef DEBUG
+    std::cout << "Tokens: [";
+    bool isFirstToken = true;
+    for (auto token : workingTokens)
+    {
+        if (!isFirstToken)
+        {
+            std::cout << ", ";
+        }
+        std::cout << "\"" << token << "\"";
+
+        isFirstToken = false;
+    }
+    std::cout << "]" << std::endl;
+    #endif
 }
 
 std::string Parser::parsePresetPositions()
