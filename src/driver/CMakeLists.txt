@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(driver)
-set(CMAKE_CXX_FLAGS "-L pthread")
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -12,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  genmsg
 )
 
 ## System dependencies are found with CMake's conventions
@@ -55,11 +55,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+ add_service_files(
+     FILES
+     control_arm.srv
+     config_arm.srv
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -69,10 +69,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -117,14 +117,15 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/driver.cpp
-# )
+ add_library(LowLevelDriverLib
+   src/Driver/LowLevelDriver/LowLevelDriver.cpp
+   src/Driver/DriverEnums.hpp
+ )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -134,8 +135,11 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-file(GLOB_RECURSE source_list "*.cpp" "*.hpp")
-add_executable(driver_node ${source_list})
+file(GLOB_RECURSE source_list_driver "DriverEnums.hpp" "HighLevelDriver.hpp" "HighLevelDriver.cpp" 
+ "IDriver" "driver_node.cpp" "Logger.cpp")
+file(GLOB_RECURSE source_list_control "control_node.cpp" "Parser.hpp" "Parser.cpp" "DriverEnums.hpp")
+add_executable(driver_node ${source_list_driver})
+add_executable(control_node ${source_list_control})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -148,10 +152,12 @@ add_executable(driver_node ${source_list})
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(${PROJECT_NAME}_node
+ target_link_libraries(driver_node
+   ${catkin_LIBRARIES} pthread ${Boost_LIBRARIES} LowLevelDriverLib
+ )
+target_link_libraries(control_node
    ${catkin_LIBRARIES}
  )
-
 #############
 ## Install ##
 #############

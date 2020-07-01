@@ -1,0 +1,4 @@
+uint8[] order
+int8[] angle_offsets
+---
+bool[] possible

@@ -1,0 +1,6 @@
+uint8[] order
+int16[] angles
+uint8[] speeds
+uint16 time
+---
+bool[] possible
