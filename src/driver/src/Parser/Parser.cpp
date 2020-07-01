@@ -96,13 +96,13 @@ void Parser::resetParser()
     workingTokens.clear();
 
     newAngles.clear();
-    newAngles.insert(std::pair<Joints, int8_t>(BASE,          INT16_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(SHOULDER,      INT16_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(ELBOW,         INT16_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(WRIST_UP_DOWN, INT16_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(GRIPPER,       INT16_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(WRIST_ROTATE,  INT16_MAX));
-
+    newAngles.insert(std::pair<Joints, int16_t>(BASE,          INT16_MAX));
+    newAngles.insert(std::pair<Joints, int16_t>(SHOULDER,      INT16_MAX));
+    newAngles.insert(std::pair<Joints, int16_t>(ELBOW,         INT16_MAX));
+    newAngles.insert(std::pair<Joints, int16_t>(WRIST_UP_DOWN, INT16_MAX));
+    newAngles.insert(std::pair<Joints, int16_t>(GRIPPER,       INT16_MAX));
+    newAngles.insert(std::pair<Joints, int16_t>(WRIST_ROTATE,  INT16_MAX));
+        
     newSpeeds.clear();
     newSpeeds.insert(std::pair<Joints, int8_t>(BASE,          100));
     newSpeeds.insert(std::pair<Joints, int8_t>(SHOULDER,      100));
@@ -374,21 +374,28 @@ bool Parser::parseMove()
 
 void Parser::clearUnusedMapItems()
 {
+    ROS_DEBUG("%s", ("Nr of elements before: " + std::to_string(newAngles.size())).c_str());
+
     std::vector<Joints> jointsToDelete;
 
     for (auto element : newAngles)
     {
+        ROS_DEBUG("%s", ("" + std::to_string(element.second) + " ?? " + std::to_string(INT16_MAX)).c_str());
         if (element.second == INT16_MAX)
         {
             jointsToDelete.push_back(element.first);
         }
     }
 
+    ROS_DEBUG("%s", ("Nr of elements to delete: " + std::to_string(jointsToDelete.size())).c_str());
+
     for (auto joint : jointsToDelete)
     {
         newAngles.erase(joint);
         newSpeeds.erase(joint);
     }
+    
+    ROS_DEBUG("%s", ("Nr of elements after: " + std::to_string(newAngles.size())).c_str());
 }
 
 std::string Parser::stringToUpper(std::string originalString)
