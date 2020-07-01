@@ -96,12 +96,11 @@ uint16_t HighLevelDriver::getMaxAngle(Joints joint)
 
 int16_t HighLevelDriver::pwmToDeg(uint16_t pwm, int8_t negativeRange)
 {
-    pwm -= negativeRange;
     const int16_t  IN_MIN = 500;
     const int16_t  IN_MAX = 2500;
     const uint16_t OUT_MIN = 0;
     const uint16_t OUT_MAX = 180;
-    return (pwm - IN_MIN) * (OUT_MAX - OUT_MIN) / (IN_MAX - IN_MIN) + OUT_MIN;
+    return ((pwm - IN_MIN) * (OUT_MAX - OUT_MIN) / (IN_MAX - IN_MIN) + OUT_MIN) - negativeRange;
 }
 
 uint16_t HighLevelDriver::degToPwm(int16_t deg, int8_t negativeRange)
