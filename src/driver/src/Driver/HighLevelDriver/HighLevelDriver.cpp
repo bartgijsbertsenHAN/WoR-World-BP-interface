@@ -28,7 +28,12 @@ HighLevelDriver::HighLevelDriver(std::string port)
     goalPositions.insert(std::pair<Joints, uint16_t>(GRIPPER,       0));
     goalPositions.insert(std::pair<Joints, uint16_t>(WRIST_ROTATE,  0));
 
-    initPositions[0] = 45; //TODO: Set init waarden
+    initPositions[BASE] = 0;
+    initPositions[SHOULDER] = 123;
+    initPositions[ELBOW] = 148;
+    initPositions[WRIST_UP_DOWN] = -45;
+    initPositions[GRIPPER] = 180;
+    initPositions[WRIST_ROTATE] = 0;
 }
 
 bool HighLevelDriver::setJointAngle(Joints joint, int16_t degrees, float speedInPercent)
