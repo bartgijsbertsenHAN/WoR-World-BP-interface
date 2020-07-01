@@ -5,30 +5,30 @@ Parser::Parser()
 {
     positionStrings.insert(std::pair<std::string, std::string>(
         "PARK",
-        "B-45;T1000;"
+        "B0;S123;E148;W-45;WR0;"
     ));
     positionStrings.insert(std::pair<std::string, std::string>(
         "READY",
-        "B0;T1000;"
+        "B0;S105;E117;W-9;WR0;"
     ));
     positionStrings.insert(std::pair<std::string, std::string>(
         "STRAIGHT",
-        "B45;T1000;"
+        "B0;S0;E0;W0;WR0;"
     ));
 
     stringsAsJoints.insert(std::pair<std::string, Joints>("B", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("S", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("E", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("W", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("G", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("R", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("WR", BASE));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("S", SHOULDER));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("E", ELBOW));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("W", WRIST_UP_DOWN));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("G", GRIPPER));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("R", WRIST_ROTATE));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("WR", WRIST_ROTATE));
     stringsAsJoints.insert(std::pair<std::string, Joints>("BASE", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("SHOULDER", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("ELBOW", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("WRIST", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("GRIPPER", BASE));
-    stringsAsJoints.insert(std::pair<std::string, Joints>("WRIST_ROTATE", BASE));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("SHOULDER", SHOULDER));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("ELBOW", ELBOW));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("WRIST", WRIST_UP_DOWN));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("GRIPPER", GRIPPER));
+    stringsAsJoints.insert(std::pair<std::string, Joints>("WRIST_ROTATE", WRIST_ROTATE));
 
     resetParser();
 }
