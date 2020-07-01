@@ -5,15 +5,15 @@ Parser::Parser()
 {
     positionStrings.insert(std::pair<std::string, std::string>(
         "PARK",
-        "B0;S123;E148;W-45;WR0;"
+        "B0;S123;E148;W-45;WR0;T5000"
     ));
     positionStrings.insert(std::pair<std::string, std::string>(
         "READY",
-        "B0;S105;E117;W-9;WR0;"
+        "B0;S105;E117;W-9;WR0;T5000"
     ));
     positionStrings.insert(std::pair<std::string, std::string>(
         "STRAIGHT",
-        "B0;S0;E0;W0;WR0;"
+        "B0;S0;E0;W0;WR0;T10000"
     ));
 
     stringsAsJoints.insert(std::pair<std::string, Joints>("B", BASE));
@@ -96,12 +96,12 @@ void Parser::resetParser()
     workingTokens.clear();
 
     newAngles.clear();
-    newAngles.insert(std::pair<Joints, int8_t>(BASE,          INT8_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(SHOULDER,      INT8_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(ELBOW,         INT8_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(WRIST_UP_DOWN, INT8_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(GRIPPER,       INT8_MAX));
-    newAngles.insert(std::pair<Joints, int8_t>(WRIST_ROTATE,  INT8_MAX));
+    newAngles.insert(std::pair<Joints, int8_t>(BASE,          INT16_MAX));
+    newAngles.insert(std::pair<Joints, int8_t>(SHOULDER,      INT16_MAX));
+    newAngles.insert(std::pair<Joints, int8_t>(ELBOW,         INT16_MAX));
+    newAngles.insert(std::pair<Joints, int8_t>(WRIST_UP_DOWN, INT16_MAX));
+    newAngles.insert(std::pair<Joints, int8_t>(GRIPPER,       INT16_MAX));
+    newAngles.insert(std::pair<Joints, int8_t>(WRIST_ROTATE,  INT16_MAX));
 
     newSpeeds.clear();
     newSpeeds.insert(std::pair<Joints, int8_t>(BASE,          100));
@@ -367,7 +367,28 @@ bool Parser::parseMove()
         }
     }
 
+    clearUnusedMapItems();
+
     return true;
+}
+
+void Parser::clearUnusedMapItems()
+{
+    std::vector<Joints> jointsToDelete;
+
+    for (auto element : newAngles)
+    {
+        if (element.second == INT16_MAX)
+        {
+            jointsToDelete.push_back(element.first);
+        }
+    }
+
+    for (auto joint : jointsToDelete)
+    {
+        newAngles.erase(joint);
+        newSpeeds.erase(joint);
+    }
 }
 
 std::string Parser::stringToUpper(std::string originalString)

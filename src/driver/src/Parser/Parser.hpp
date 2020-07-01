@@ -56,6 +56,11 @@ public:
     /// @return True when the parsing was successfull, false when an error occurred
     bool parseMove();
 
+    /// @brief Removes items from the map that are not used
+    /// @details The elements from the maps from the Parser instance that do not have
+    ///    a new value are deleted before the map is used to send data to the driver.
+    void clearUnusedMapItems();
+
     /// @brief Converts a string to its uppercase representation
     /// @param originalString The original string
     /// @return The uppercase representation of the string
@@ -68,13 +73,13 @@ public:
     Joints stringToJoint(std::string jointAsString);
 
     /// @brief A map that stores the new angle for every joint
-    std::map<Joints, int8_t> newAngles;
+    std::map<Joints, int16_t> newAngles;
     
     /// @brief A map that stores the new speed for every joint
     std::map<Joints, int8_t> newSpeeds;
 
-    /// An integer that stores the time that the entire movement should take
-    int8_t timeToComplete;
+    /// An integer that stores the time in milliseconds that the entire movement should take
+    uint16_t timeToComplete;
 
 private:
     /// The map maps the strings that the user sends to pre-defined
